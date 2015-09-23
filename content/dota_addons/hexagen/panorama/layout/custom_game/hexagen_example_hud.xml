@@ -1,0 +1,154 @@
+<root>
+	<styles>
+ 		<include src="s2r://panorama/styles/dotastyles.vcss_c" />
+		<include src="file://{resources}/styles/custom_game/hexagen_example_hud.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/hexagen_example_hud.js" />
+	</scripts>
+
+    <script>
+
+		// GOTTA PUT THIS HERE FOR SOME REASON
+		// ¯\_(ツ)_/¯
+
+		GameUI.SetRenderTopInsetOverride( 0 );
+		GameUI.SetRenderBottomInsetOverride( 0 );
+
+		GameUI.SetDefaultUIEnabled( DotaDefaultUIElement_t.DOTA_DEFAULT_UI_TOP_TIMEOFDAY, false );
+
+		GameUI.SetDefaultUIEnabled( DotaDefaultUIElement_t.DOTA_DEFAULT_UI_HERO_SELECTION_TEAMS, false );
+		GameUI.SetDefaultUIEnabled( DotaDefaultUIElement_t.DOTA_DEFAULT_UI_HERO_SELECTION_GAME_NAME, false );
+		GameUI.SetDefaultUIEnabled( DotaDefaultUIElement_t.DOTA_DEFAULT_UI_HERO_SELECTION_CLOCK, false );
+
+		GameUI.SetDefaultUIEnabled( DotaDefaultUIElement_t.DOTA_DEFAULT_UI_ENDGAME, false );
+		GameUI.SetDefaultUIEnabled( DotaDefaultUIElement_t.DOTA_DEFAULT_UI_FLYOUT_SCOREBOARD, false );
+
+		GameUI.SetDefaultUIEnabled( DotaDefaultUIElement_t.DOTA_DEFAULT_UI_TOP_MENU_BUTTONS, false );
+		GameUI.SetDefaultUIEnabled( DotaDefaultUIElement_t.DOTA_DEFAULT_UI_TOP_BAR_BACKGROUND, false );
+		GameUI.SetDefaultUIEnabled( DotaDefaultUIElement_t.DOTA_DEFAULT_UI_TOP_HEROES, false );
+
+		GameUI.SetDefaultUIEnabled( DotaDefaultUIElement_t.DOTA_DEFAULT_UI_INVENTORY_PANEL, false );
+		GameUI.SetDefaultUIEnabled( DotaDefaultUIElement_t.DOTA_DEFAULT_UI_INVENTORY_SHOP, false );
+		GameUI.SetDefaultUIEnabled( DotaDefaultUIElement_t.DOTA_DEFAULT_UI_INVENTORY_ITEMS, false );
+		GameUI.SetDefaultUIEnabled( DotaDefaultUIElement_t.DOTA_DEFAULT_UI_INVENTORY_QUICKBUY, false );
+		GameUI.SetDefaultUIEnabled( DotaDefaultUIElement_t.DOTA_DEFAULT_UI_INVENTORY_COURIER, false );
+		GameUI.SetDefaultUIEnabled( DotaDefaultUIElement_t.DOTA_DEFAULT_UI_INVENTORY_PROTECT, false );
+		GameUI.SetDefaultUIEnabled( DotaDefaultUIElement_t.DOTA_DEFAULT_UI_INVENTORY_GOLD, false );
+		GameUI.SetDefaultUIEnabled( DotaDefaultUIElement_t.DOTA_DEFAULT_UI_SHOP_SUGGESTEDITEMS, false );
+
+		GameUI.SetDefaultUIEnabled( DotaDefaultUIElement_t.DOTA_DEFAULT_UI_ACTION_PANEL, false );
+		GameUI.SetDefaultUIEnabled( DotaDefaultUIElement_t.DOTA_DEFAULT_UI_ACTION_MINIMAP, false );
+
+		GameUI.SetCameraPitchMin( 90 );
+		GameUI.SetCameraPitchMax( 90 );
+		GameUI.SetCameraDistance( 2300 ); 
+
+	</script>
+	
+	<Panel class="HexygenHudRoot" hittest="false" >
+		<Panel class="HexygenLengthRow" hittest="false" >
+
+			<Label class="HexygenLengthLabelName" id="HexygenLengthNameA" text="A Length: " hittest="false" />
+			<Panel class="HexygenButtonContainer" hittest="false">
+				<Button class="HexygenLessButton" id="HexygenLessButtonA" onactivate="HexygenLessButton('A')" >
+					<Label class="HexygenButtonLabel" text="&lt;" hittest="false" /> 
+				</Button>
+
+				<Label class="HexygenLengthLabel" id="HexygenLengthLabelA" text="3" hittest="false" />
+
+				<Button class="HexygenMoreButton" id="HexygenMoreButtonA" onactivate="HexygenMoreButton('A')" >
+					<Label class="HexygenButtonLabel" text="&gt;" hittest="false" /> 
+				</Button>
+			</Panel>
+		</Panel>
+		<Panel class="HexygenLengthRow" hittest="false" >
+
+			<Label class="HexygenLengthLabelName" id="HexygenLengthNameB" text="B Length: " hittest="false" />
+			<Panel class="HexygenButtonContainer" hittest="false">
+				<Button class="HexygenLessButton" id="HexygenLessButtonB" onactivate="HexygenLessButton('B')" >
+					<Label class="HexygenButtonLabel" text="&lt;" hittest="false" /> 
+				</Button>
+
+				<Label class="HexygenLengthLabel" id="HexygenLengthLabelB" text="2" hittest="false" />
+
+				<Button class="HexygenMoreButton" id="HexygenMoreButtonB" onactivate="HexygenMoreButton('B')" >
+					<Label class="HexygenButtonLabel" text="&gt;" hittest="false" /> 
+				</Button>
+			</Panel>
+
+
+		</Panel>
+		<Panel class="HexygenLengthRow" hittest="false" >
+
+			<Label class="HexygenLengthLabelName" id="HexygenLengthNameC" text="C Length: " hittest="false" />
+			<Panel class="HexygenButtonContainer" hittest="false">
+				<Button class="HexygenLessButton" id="HexygenLessButtonC" onactivate="HexygenLessButton('C')" >
+					<Label class="HexygenButtonLabel" text="&lt;" hittest="false" /> 
+				</Button>
+
+				<Label class="HexygenLengthLabel" id="HexygenLengthLabelC" text="2" hittest="false" />
+
+				<Button class="HexygenMoreButton" id="HexygenMoreButtonC" onactivate="HexygenMoreButton('C')" >
+					<Label class="HexygenButtonLabel" text="&gt;" hittest="false" /> 
+				</Button>
+			</Panel>
+
+
+		</Panel>
+		<Panel class="HexygenLengthRow" hittest="false" >
+
+			<Label class="HexygenLengthLabelName" id="HexygenLengthNameD" text="D Length: " hittest="false" />
+			<Panel class="HexygenButtonContainer" hittest="false">
+
+				<Button class="HexygenLessButton" id="HexygenLessButtonD" onactivate="HexygenLessButton('D')" >
+					<Label class="HexygenButtonLabel" text="&lt;" hittest="false" /> 
+				</Button>
+				<Label class="HexygenLengthLabel" id="HexygenLengthLabelD" text="3" hittest="false" />
+
+				<Button class="HexygenMoreButton" id="HexygenMoreButtonD" onactivate="HexygenMoreButton('D')" >
+					<Label class="HexygenButtonLabel" text="&gt;" hittest="false" /> 
+				</Button>
+			</Panel>
+
+		</Panel>
+		<Panel class="HexygenLengthRow" hittest="false" >
+
+			<Label class="HexygenLengthLabelName" id="HexygenLengthNameE" text="E Length: " hittest="false" />
+			<Panel class="HexygenButtonContainer" hittest="false">
+				<Button class="HexygenLessButton" id="HexygenLessButtonE" onactivate="HexygenLessButton('E')" >
+					<Label class="HexygenButtonLabel" text="&lt;" hittest="false" /> 
+				</Button>
+
+				<Label class="HexygenLengthLabel" id="HexygenLengthLabelE" text="2" hittest="false" />
+
+				<Button class="HexygenMoreButton" id="HexygenMoreButtonE" onactivate="HexygenMoreButton('E')" >
+					<Label class="HexygenButtonLabel" text="&gt;" hittest="false" /> 
+				</Button>
+			</Panel>
+
+		</Panel>
+		<Panel class="HexygenLengthRow" hittest="false" >
+
+			<Label class="HexygenLengthLabelName" id="HexygenLengthNameF" text="F Length: " hittest="false" />
+			<Panel class="HexygenButtonContainer" hittest="false">
+				<Button class="HexygenLessButton" id="HexygenLessButtonF" onactivate="HexygenLessButton('F')" >
+					<Label class="HexygenButtonLabel" text="&lt;" hittest="false" /> 
+				</Button>
+
+				<Label class="HexygenLengthLabel" id="HexygenLengthLabelF" text="2" hittest="false" />
+
+				<Button class="HexygenMoreButton" id="HexygenMoreButtonF" onactivate="HexygenMoreButton('F')" >
+					<Label class="HexygenButtonLabel" text="&gt;" hittest="false" /> 
+				</Button>
+			</Panel>
+
+		</Panel>
+		<Panel class="HexygenLengthRow" hittest="false" >
+			<Button class="HexygenRegenButton" onactivate="HexygenRegen()" >
+				<Label class="HexygenRegenLabel" text="Regenerate Grid" hittest="false" />
+			</Button>
+		</Panel>
+	</Panel>
+</root>

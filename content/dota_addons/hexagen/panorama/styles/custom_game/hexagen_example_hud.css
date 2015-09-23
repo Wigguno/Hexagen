@@ -1,0 +1,51 @@
+.HexygenHudRoot
+{
+	align: left center;
+	background-color: #444444aa;
+	flow-children: down;
+	margin-left: 50px;
+	width: 200px;
+}
+.HexygenLengthRow
+{
+	margin-top: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	padding-right: 10px;
+	width: 100%;
+	border-bottom: 1px solid black;
+}
+.HexygenLengthLabelName
+{
+	align: left center;
+}
+.HexygenButtonContainer
+{
+	align: right center;
+	width: 80px;
+}
+.HexygenLessButton, .HexygenMoreButton
+{
+	background-color: #333333aa;
+	padding-left: 5px;
+	padding-right: 5px;
+	vertical-align: center;
+	border: 1px solid black;
+}
+.HexygenLengthLabel
+{
+	vertical-align: center;
+	font-size: 24px;
+}
+.HexygenLessButton	{ horizontal-align: left;}
+.HexygenLengthLabel	{ horizontal-align: center;}
+.HexygenMoreButton	{ horizontal-align: right;}
+
+.HexygenRegenButton
+{
+	width: 100%;
+}
+.HexygenRegenLabel
+{
+	align: center center;
+}

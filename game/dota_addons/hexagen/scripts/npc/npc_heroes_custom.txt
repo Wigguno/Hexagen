@@ -1,0 +1,29 @@
+// Dota Heroes File
+// NOTE: This is not for creating new heroes, this is for taking a currently existing hero as a template and overriding
+// the specified key-value combinations.  Use override_hero <hero_to_override> for this.
+"DOTAHeroes"
+{
+	//=================================================================================================================
+	// HERO: Empty Template
+	//=================================================================================================================
+	"npc_dota_hero_rattletrap_empty"
+	{
+		"override_hero"				"npc_dota_hero_rattletrap"			// Hero to override
+		
+		"Ability1"					"hero_hider"
+		"Ability2"					""		
+		"Ability3"					""
+		"Ability4"					""
+
+		"Ability8"					""
+
+		
+
+		"MovementCapabilities"		"DOTA_UNIT_CAP_MOVE_NONE"
+		"MovementSpeed" 			"100"       // Speed
+		"MovementTurnRate" 			"0.5"       // Turning rate.
+
+		"AttackCapabilities" 		"DOTA_UNIT_CAP_NO_ATTACK"
+
+	}
+}

@@ -1,0 +1,4 @@
+"AddonInfo"
+{
+	"addontitle" 	"Hexagen Demo"
+}
