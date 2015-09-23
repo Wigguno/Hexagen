@@ -7,6 +7,8 @@
 *.vmat_c
 *.vtex_c
 *.bin
+*.vmdl_c
+*.vmesh_c
 
 # Panorama
 *.vxml_c
