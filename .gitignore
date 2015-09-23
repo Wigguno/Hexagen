@@ -1,11 +1,14 @@
-# Build and Release Folders
-bin/
-bin-debug/
-bin-release/
+# Dota2 Reborn compiled extensions
 
-# Other files and folders
-.settings/
+*.vpk
+*.vpcf_c
+*.vsnd_c
+*.vsndevts_c
+*.vmat_c
+*.vtex_c
+*.bin
 
-# Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
-# should NOT be excluded as they contain compiler settings and other important
-# information for Eclipse / Flash Builder.
+# Panorama
+*.vxml_c
+*.vjs_c
+*.vcss_c
