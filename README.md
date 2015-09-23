@@ -4,7 +4,9 @@ Hexagon grid generator for Dota 2 custom games
 Hexagen utilizes cube coordinates as presented by Amit Patel  
 http://www.redblobgames.com/grids/hexagons/
 
-Example Results: http://i.imgur.com/ZU7MQvs.jpg
+Example Results:  
+http://i.imgur.com/ZU7MQvs.jpg  
+http://i.imgur.com/eY94qGS.jpg
 
 # How To Use
 
