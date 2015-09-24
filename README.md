@@ -8,6 +8,7 @@ Example Results:
 http://i.imgur.com/ZU7MQvs.jpg  
 http://i.imgur.com/eY94qGS.jpg  
 http://i.imgur.com/a2DKdzC.jpg
+http://i.imgur.com/yqYCS8o.jpg
 
 # How To Use
 ```lua
@@ -44,5 +45,7 @@ To run a pathfinding query on a grid, use
 PathList = Hexagen:FindPath(HexList, PathType, StartingName, EndingName)
 ```
 Where PathType is either "Hex" or "Node" to run a hex or node query. Starting/Ending Name are the name of the tiles for the path to start and end at
+
+PathList will be a list of all the names of the tiles in the path, or nil if no route was found
 
 For more information about how to use HexList, see addon_game_mode.lua
