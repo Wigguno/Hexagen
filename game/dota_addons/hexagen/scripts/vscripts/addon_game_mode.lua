@@ -240,7 +240,7 @@ function CHexygenGameMode:OnThink()
 				DebugDrawLine(t.Location, self.TileList.HexList[n].Location, 255, 255, 0, true, draw_time)
 			end
 
-			for _, h in pairs(t.Nodes) do
+			for h in t:AllNodes() do
 				DebugDrawLine(t.Location, self.TileList.NodeList[h].Location, 255, 255, 0, true, draw_time)
 			end
 
@@ -251,7 +251,7 @@ function CHexygenGameMode:OnThink()
 				DebugDrawLine(t.Location, self.TileList.NodeList[n].Location, 255, 255, 0, true, draw_time)
 			end
 
-			for _, h in pairs(t.Hexes) do
+			for h in t:AllHexes() do
 				DebugDrawLine(t.Location, self.TileList.HexList[h].Location, 255, 255, 0, true, draw_time)
 			end
 		end

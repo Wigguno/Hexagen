@@ -82,9 +82,6 @@ function Hexagen:GenerateHexagonGrid(GridCenter, HexRadius, PathWidth, LengthTab
 	local hex = {}
 	hex["name"] = "Hex_" .. HexCount
 	hex["location"] = CenterLocation
-	hex["pathable"] = true
-	hex["neighbours"] = {}
-	hex["nodes"] = {}
 
 	HexTable[0][0][0] = hex
 
@@ -141,9 +138,6 @@ function Hexagen:GenerateHexagonGrid(GridCenter, HexRadius, PathWidth, LengthTab
 			HexCount = HexCount + 1
 			hex["name"] = "Hex_" .. HexCount
 			hex["location"] = HexLocation
-			hex["pathable"] = true
-			hex["neighbours"] = {}
-			hex["nodes"] = {}
 
 			HexTable[LenA][LenB][LenC] = hex
 			
@@ -167,9 +161,6 @@ function Hexagen:GenerateHexagonGrid(GridCenter, HexRadius, PathWidth, LengthTab
 						HexCount = HexCount + 1
 						hex["name"] = "Hex_" .. HexCount
 						hex["location"] = LeafLocation
-						hex["pathable"] = true
-						hex["neighbours"] = {}
-						hex["nodes"] = {}
 
 						HexTable[LeafA][LeafB][LeafC] = hex
 					end
@@ -196,9 +187,6 @@ function Hexagen:GenerateHexagonGrid(GridCenter, HexRadius, PathWidth, LengthTab
 						HexCount = HexCount + 1
 						hex["name"] = "Hex_" .. HexCount
 						hex["location"] = LeafLocation
-						hex["pathable"] = true
-						hex["neighbours"] = {}
-						hex["nodes"] = {}
 
 						HexTable[LeafA][LeafB][LeafC] = hex
 
@@ -630,6 +618,17 @@ function HexTile.new(HexName)
 		end
 	end
 
+	function self.AllNodes()
+		local i = 0
+		local n = 6
+		return function()
+			i = i + 1
+			if i <= n then
+				return self.Nodes[i] 
+			end
+		end
+	end
+
 	return self
 end
 
@@ -649,6 +648,21 @@ function NodeTile.new(NodeName)
 			i = i + 1
 			if i <= n then 
 				return self.Neighbours[i]
+			end
+		end
+	end
+
+	function self.AllHexes()
+		local i = 0
+		local n = 3
+		return function()
+			i = i + 1
+			if i <= n then 
+				while self.Hexes[i] == nil do 
+					i = i + 1
+					if i > n then return nil end
+				end
+				return self.Hexes[i]
 			end
 		end
 	end

@@ -37,6 +37,29 @@ end
 for NodeData in TileList:AllNodes() do
 	...
 end
+
+-- Iterate over Neighbours
+for NeighbourName in HexData:AllNeighbours() do
+	NeighbourData = TileList.HexList[NeighbourName]
+	...
+end
+for NeighbourName in NodeData:AllNeighbours() do
+	NeighbourData = TileList.NodeList[NeighbourName]
+	...
+end
+
+-- Iterate over Nodes next to a Hex
+for NodeName in HexData:AllNodes() do
+	NodeData = TileList.NodeList[NodeName]
+	...
+end
+-- Iterate over Hexes next to a Node
+for HexName in NodeData:AllNodes() do
+	HexData = TileList.HexList[HexName]
+	...
+end
+
+
 ```
 
 To run a pathfinding query on a grid, use 
