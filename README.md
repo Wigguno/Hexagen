@@ -10,8 +10,8 @@ http://i.imgur.com/eY94qGS.jpg
 http://i.imgur.com/a2DKdzC.jpg
 
 # How To Use
-```
-Hexagen:GenerateHexagonGrid(HexRadius, PathWidth, LengthTable)
+```lua
+Hexagen:GenerateHexagonGrid(GridCenter, HexRadius, PathWidth, LengthTable)
 ```
 GridCenter  (Vector): The center of the hex grid  
 HexRadius  (Number): The distance from the center of a hex tile to one of the corners  
@@ -19,14 +19,15 @@ PathWidth  (Number): The distance to leave between adjacent hex tiles
 LengthTable (Table): A table that defines the length of each of the 6 legs
 
 Example:  
-```
-HexList = Hexagen:GenerateHexagonGrid(Vector(0, 0, 128, 64, 32, {3, 2, 2, 3, 2, 2}))
+```lua
+HexList = Hexagen:GenerateHexagonGrid(Vector(0, 0, 128), 64, 32, {3, 2, 2, 3, 2, 2}))
 ```
 
-HexList is a table of all hex tiles and nodes in the grid. Each key is the name. Each value is a table that contains information about the hex/node, such as location, neighbours, and if it's pathable or not
+HexList is a table of all hex tiles and nodes in the grid. Each key is the name. Each value is a table that contains information about the hex/node, such as location, neighbours, and if it's pathable or not  
+HexList also contains two number values, the number of hexes, and the number of nodes. These are stored with keys "HexCount" and "NodeCount"
 
 The hexes can be iterated using:
-```
+```lua
     for HexData in Hexagen:AllHexes(HexList) do
 		...
 	end

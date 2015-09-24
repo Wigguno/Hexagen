@@ -18,7 +18,7 @@ function Hexagen:GenerateHexagonGrid(GridCenter, HexRadius, PathWidth, LengthTab
 	-- LengthTable (Table): A table that defines the length of each of the 6 legs
 	--
 	-- Example:
-	-- HexList = Hexagen:GenerateHexagonGrid(Vector(0, 0, 128, 64, 32, {3, 2, 2, 3, 2, 2}))
+	-- HexList = Hexagen:GenerateHexagonGrid(Vector(0, 0, 128), 64, 32, {3, 2, 2, 3, 2, 2}))
 
 	-- This is a distance used internally to set the distance between hexes
 	local HexDistance = HexRadius + PathWidth
