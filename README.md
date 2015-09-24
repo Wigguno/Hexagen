@@ -54,7 +54,7 @@ for NodeName in HexData:AllNodes() do
 	...
 end
 -- Iterate over Hexes next to a Node
-for HexName in NodeData:AllNodes() do
+for HexName in NodeData:AllHexes() do
 	HexData = TileList.HexList[HexName]
 	...
 end
