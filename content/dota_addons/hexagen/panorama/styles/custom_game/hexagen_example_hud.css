@@ -1,9 +1,22 @@
 .HexygenHudRoot
 {
+	width: 100%;
+	height: 100%;
+}
+.HexygenGridControlContainer
+{
 	align: left center;
 	background-color: #444444aa;
 	flow-children: down;
 	margin-left: 50px;
+	width: 200px;
+}
+.HexygenPathingControlContainer
+{
+	align: right center;
+	background-color: #444444aa;
+	flow-children: down;
+	margin-right: 50px;
 	width: 200px;
 }
 .HexygenLengthRow
@@ -48,4 +61,8 @@
 .HexygenRegenLabel
 {
 	align: center center;
+}
+.HexygenToggle #Label
+{
+	font-size: 24px;
 }

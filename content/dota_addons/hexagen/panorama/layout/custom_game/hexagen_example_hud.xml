@@ -5,6 +5,7 @@
 	</styles>
 	
 	<scripts>
+		<include src="file://{resources}/scripts/custom_game/Vector.js" />
 		<include src="file://{resources}/scripts/custom_game/hexagen_example_hud.js" />
 	</scripts>
 
@@ -48,123 +49,154 @@
 	</script>
 	
 	<Panel class="HexygenHudRoot" hittest="false" >
-		<Panel class="HexygenLengthRow" hittest="false" >
+		<Panel class="HexygenGridControlContainer" hittest="false" >
+			<Panel class="HexygenLengthRow" hittest="false" >
 
-			<Label class="HexygenLengthLabelName" id="HexygenLengthNameA" text="A Length: " hittest="false" />
-			<Panel class="HexygenButtonContainer" hittest="false">
-				<Button class="HexygenLessButton" id="HexygenLessButtonA" onactivate="HexygenLessButton('A')" >
-					<Label class="HexygenButtonLabel" text="&lt;" hittest="false" /> 
-				</Button>
+				<Label class="HexygenLengthLabelName" id="HexygenLengthNameA" text="A Length: " hittest="false" />
+				<Panel class="HexygenButtonContainer" hittest="false">
+					<Button class="HexygenLessButton" id="HexygenLessButtonA" onactivate="HexygenLessButton('A')" >
+						<Label class="HexygenButtonLabel" text="&lt;" hittest="false" /> 
+					</Button>
 
-				<Label class="HexygenLengthLabel" id="HexygenLengthLabelA" text="3" hittest="false" />
+					<Label class="HexygenLengthLabel" id="HexygenLengthLabelA" text="3" hittest="false" />
 
-				<Button class="HexygenMoreButton" id="HexygenMoreButtonA" onactivate="HexygenMoreButton('A')" >
-					<Label class="HexygenButtonLabel" text="&gt;" hittest="false" /> 
+					<Button class="HexygenMoreButton" id="HexygenMoreButtonA" onactivate="HexygenMoreButton('A')" >
+						<Label class="HexygenButtonLabel" text="&gt;" hittest="false" /> 
+					</Button>
+				</Panel>
+			</Panel>
+			<Panel class="HexygenLengthRow" hittest="false" >
+
+				<Label class="HexygenLengthLabelName" id="HexygenLengthNameB" text="B Length: " hittest="false" />
+				<Panel class="HexygenButtonContainer" hittest="false">
+					<Button class="HexygenLessButton" id="HexygenLessButtonB" onactivate="HexygenLessButton('B')" >
+						<Label class="HexygenButtonLabel" text="&lt;" hittest="false" /> 
+					</Button>
+
+					<Label class="HexygenLengthLabel" id="HexygenLengthLabelB" text="2" hittest="false" />
+
+					<Button class="HexygenMoreButton" id="HexygenMoreButtonB" onactivate="HexygenMoreButton('B')" >
+						<Label class="HexygenButtonLabel" text="&gt;" hittest="false" /> 
+					</Button>
+				</Panel>
+
+
+			</Panel>
+			<Panel class="HexygenLengthRow" hittest="false" >
+
+				<Label class="HexygenLengthLabelName" id="HexygenLengthNameC" text="C Length: " hittest="false" />
+				<Panel class="HexygenButtonContainer" hittest="false">
+					<Button class="HexygenLessButton" id="HexygenLessButtonC" onactivate="HexygenLessButton('C')" >
+						<Label class="HexygenButtonLabel" text="&lt;" hittest="false" /> 
+					</Button>
+
+					<Label class="HexygenLengthLabel" id="HexygenLengthLabelC" text="2" hittest="false" />
+
+					<Button class="HexygenMoreButton" id="HexygenMoreButtonC" onactivate="HexygenMoreButton('C')" >
+						<Label class="HexygenButtonLabel" text="&gt;" hittest="false" /> 
+					</Button>
+				</Panel>
+
+
+			</Panel>
+			<Panel class="HexygenLengthRow" hittest="false" >
+
+				<Label class="HexygenLengthLabelName" id="HexygenLengthNameD" text="D Length: " hittest="false" />
+				<Panel class="HexygenButtonContainer" hittest="false">
+
+					<Button class="HexygenLessButton" id="HexygenLessButtonD" onactivate="HexygenLessButton('D')" >
+						<Label class="HexygenButtonLabel" text="&lt;" hittest="false" /> 
+					</Button>
+					<Label class="HexygenLengthLabel" id="HexygenLengthLabelD" text="3" hittest="false" />
+
+					<Button class="HexygenMoreButton" id="HexygenMoreButtonD" onactivate="HexygenMoreButton('D')" >
+						<Label class="HexygenButtonLabel" text="&gt;" hittest="false" /> 
+					</Button>
+				</Panel>
+
+			</Panel>
+			<Panel class="HexygenLengthRow" hittest="false" >
+
+				<Label class="HexygenLengthLabelName" id="HexygenLengthNameE" text="E Length: " hittest="false" />
+				<Panel class="HexygenButtonContainer" hittest="false">
+					<Button class="HexygenLessButton" id="HexygenLessButtonE" onactivate="HexygenLessButton('E')" >
+						<Label class="HexygenButtonLabel" text="&lt;" hittest="false" /> 
+					</Button>
+
+					<Label class="HexygenLengthLabel" id="HexygenLengthLabelE" text="2" hittest="false" />
+
+					<Button class="HexygenMoreButton" id="HexygenMoreButtonE" onactivate="HexygenMoreButton('E')" >
+						<Label class="HexygenButtonLabel" text="&gt;" hittest="false" /> 
+					</Button>
+				</Panel>
+
+			</Panel>
+			<Panel class="HexygenLengthRow" hittest="false" >
+
+				<Label class="HexygenLengthLabelName" id="HexygenLengthNameF" text="F Length: " hittest="false" />
+				<Panel class="HexygenButtonContainer" hittest="false">
+					<Button class="HexygenLessButton" id="HexygenLessButtonF" onactivate="HexygenLessButton('F')" >
+						<Label class="HexygenButtonLabel" text="&lt;" hittest="false" /> 
+					</Button>
+
+					<Label class="HexygenLengthLabel" id="HexygenLengthLabelF" text="2" hittest="false" />
+
+					<Button class="HexygenMoreButton" id="HexygenMoreButtonF" onactivate="HexygenMoreButton('F')" >
+						<Label class="HexygenButtonLabel" text="&gt;" hittest="false" /> 
+					</Button>
+				</Panel>
+
+			</Panel>
+			<Panel class="HexygenLengthRow" hittest="false" >
+
+				<Label class="HexygenLengthLabelName" text="Path Width: " hittest="false" />
+				<Panel class="HexygenButtonContainer" hittest="false">
+					<Button class="HexygenLessButton" id="HexygenLessButtonPW" onactivate="HexygenLessPWButton()" >
+						<Label class="HexygenButtonLabel" text="&lt;" hittest="false" /> 
+					</Button>
+
+					<Label class="HexygenLengthLabel" id="HexygenLengthLabelPW" text="32" hittest="false" />
+
+					<Button class="HexygenMoreButton" id="HexygenMoreButtonPW" onactivate="HexygenMorePWButton()" >
+						<Label class="HexygenButtonLabel" text="&gt;" hittest="false" /> 
+					</Button>
+				</Panel>
+
+			</Panel>>
+
+			<Panel class="HexygenLengthRow" hittest="false" >
+				<Button class="HexygenRegenButton" onactivate="HexygenRegen()" >
+					<Label class="HexygenRegenLabel" text="Regenerate Grid" hittest="false" />
 				</Button>
 			</Panel>
 		</Panel>
-		<Panel class="HexygenLengthRow" hittest="false" >
+		<Panel class="HexygenPathingControlContainer" hittest="false" >
+			<Panel class="HexygenLengthRow" hittest="false" >
+				<ToggleButton text="Draw Hex Pathing" class="HexygenToggle" id="HexDrawPathingToggle" onactivate="TogglePathing()" />
+			</Panel>
+			<Panel class="HexygenLengthRow" hittest="false" >
+				<ToggleButton text="Draw Node Pathing" class="HexygenToggle" id="NodeDrawPathingToggle" onactivate="TogglePathing()" />
+			</Panel>
 
-			<Label class="HexygenLengthLabelName" id="HexygenLengthNameB" text="B Length: " hittest="false" />
-			<Panel class="HexygenButtonContainer" hittest="false">
-				<Button class="HexygenLessButton" id="HexygenLessButtonB" onactivate="HexygenLessButton('B')" >
-					<Label class="HexygenButtonLabel" text="&lt;" hittest="false" /> 
-				</Button>
+			<Panel class="HexygenLengthRow" hittest="false" >
+				<ToggleButton text="Toggle Hex Pathing" class="HexygenToggle" id="HexPathingToggle" onactivate="HexygenToggleHexes()" />		
+			</Panel>
 
-				<Label class="HexygenLengthLabel" id="HexygenLengthLabelB" text="2" hittest="false" />
+			<Panel class="HexygenLengthRow" hittest="false" >
+				<ToggleButton text="Toggle Node Pathing" class="HexygenToggle" id="NodePathingToggle" onactivate="HexygenToggleNodes()" />		
+			</Panel>
 
-				<Button class="HexygenMoreButton" id="HexygenMoreButtonB" onactivate="HexygenMoreButton('B')" >
-					<Label class="HexygenButtonLabel" text="&gt;" hittest="false" /> 
+			<Panel class="HexygenLengthRow" hittest="false" >
+				<Button class="HexygenRegenButton" onactivate="HexygenStartHexPathingQuery()" >
+					<Label class="HexygenRegenLabel" id="StartingHexPathingText" text="Start Hex Pathing Query" hittest="false" />
 				</Button>
 			</Panel>
 
-
-		</Panel>
-		<Panel class="HexygenLengthRow" hittest="false" >
-
-			<Label class="HexygenLengthLabelName" id="HexygenLengthNameC" text="C Length: " hittest="false" />
-			<Panel class="HexygenButtonContainer" hittest="false">
-				<Button class="HexygenLessButton" id="HexygenLessButtonC" onactivate="HexygenLessButton('C')" >
-					<Label class="HexygenButtonLabel" text="&lt;" hittest="false" /> 
-				</Button>
-
-				<Label class="HexygenLengthLabel" id="HexygenLengthLabelC" text="2" hittest="false" />
-
-				<Button class="HexygenMoreButton" id="HexygenMoreButtonC" onactivate="HexygenMoreButton('C')" >
-					<Label class="HexygenButtonLabel" text="&gt;" hittest="false" /> 
+			<Panel class="HexygenLengthRow" hittest="false" >
+				<Button class="HexygenRegenButton" onactivate="HexygenStartNodePathingQuery()" >
+					<Label class="HexygenRegenLabel" id="StartingNodePathingText" text="Start Node Pathing Query" hittest="false" />
 				</Button>
 			</Panel>
-
-
-		</Panel>
-		<Panel class="HexygenLengthRow" hittest="false" >
-
-			<Label class="HexygenLengthLabelName" id="HexygenLengthNameD" text="D Length: " hittest="false" />
-			<Panel class="HexygenButtonContainer" hittest="false">
-
-				<Button class="HexygenLessButton" id="HexygenLessButtonD" onactivate="HexygenLessButton('D')" >
-					<Label class="HexygenButtonLabel" text="&lt;" hittest="false" /> 
-				</Button>
-				<Label class="HexygenLengthLabel" id="HexygenLengthLabelD" text="3" hittest="false" />
-
-				<Button class="HexygenMoreButton" id="HexygenMoreButtonD" onactivate="HexygenMoreButton('D')" >
-					<Label class="HexygenButtonLabel" text="&gt;" hittest="false" /> 
-				</Button>
-			</Panel>
-
-		</Panel>
-		<Panel class="HexygenLengthRow" hittest="false" >
-
-			<Label class="HexygenLengthLabelName" id="HexygenLengthNameE" text="E Length: " hittest="false" />
-			<Panel class="HexygenButtonContainer" hittest="false">
-				<Button class="HexygenLessButton" id="HexygenLessButtonE" onactivate="HexygenLessButton('E')" >
-					<Label class="HexygenButtonLabel" text="&lt;" hittest="false" /> 
-				</Button>
-
-				<Label class="HexygenLengthLabel" id="HexygenLengthLabelE" text="2" hittest="false" />
-
-				<Button class="HexygenMoreButton" id="HexygenMoreButtonE" onactivate="HexygenMoreButton('E')" >
-					<Label class="HexygenButtonLabel" text="&gt;" hittest="false" /> 
-				</Button>
-			</Panel>
-
-		</Panel>
-		<Panel class="HexygenLengthRow" hittest="false" >
-
-			<Label class="HexygenLengthLabelName" id="HexygenLengthNameF" text="F Length: " hittest="false" />
-			<Panel class="HexygenButtonContainer" hittest="false">
-				<Button class="HexygenLessButton" id="HexygenLessButtonF" onactivate="HexygenLessButton('F')" >
-					<Label class="HexygenButtonLabel" text="&lt;" hittest="false" /> 
-				</Button>
-
-				<Label class="HexygenLengthLabel" id="HexygenLengthLabelF" text="2" hittest="false" />
-
-				<Button class="HexygenMoreButton" id="HexygenMoreButtonF" onactivate="HexygenMoreButton('F')" >
-					<Label class="HexygenButtonLabel" text="&gt;" hittest="false" /> 
-				</Button>
-			</Panel>
-
-		</Panel>
-		<Panel class="HexygenLengthRow" hittest="false" >
-
-			<Label class="HexygenLengthLabelName" text="Path Width: " hittest="false" />
-			<Panel class="HexygenButtonContainer" hittest="false">
-				<Button class="HexygenLessButton" id="HexygenLessButtonPW" onactivate="HexygenLessPWButton()" >
-					<Label class="HexygenButtonLabel" text="&lt;" hittest="false" /> 
-				</Button>
-
-				<Label class="HexygenLengthLabel" id="HexygenLengthLabelPW" text="32" hittest="false" />
-
-				<Button class="HexygenMoreButton" id="HexygenMoreButtonPW" onactivate="HexygenMorePWButton()" >
-					<Label class="HexygenButtonLabel" text="&gt;" hittest="false" /> 
-				</Button>
-			</Panel>
-
-		</Panel>
-		<Panel class="HexygenLengthRow" hittest="false" >
-			<Button class="HexygenRegenButton" onactivate="HexygenRegen()" >
-				<Label class="HexygenRegenLabel" text="Regenerate Grid" hittest="false" />
-			</Button>
 		</Panel>
 	</Panel>
 </root>

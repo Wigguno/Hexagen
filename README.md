@@ -26,15 +26,23 @@ HexList = Hexagen:GenerateHexagonGrid(Vector(0, 0, 128), 64, 32, {3, 2, 2, 3, 2,
 HexList is a table of all hex tiles and nodes in the grid. Each key is the name. Each value is a table that contains information about the hex/node, such as location, neighbours, and if it's pathable or not  
 HexList also contains two number values, the number of hexes, and the number of nodes. These are stored with keys "HexCount" and "NodeCount"
 
-The hexes can be iterated using:
+Hexagen also includes iterators to iterate over the results of a HexList
 ```lua
-    for HexData in Hexagen:AllHexes(HexList) do
-		...
-	end
-	
-    for NodeData in Hexagen:AllNodes(HexList) do
-		...
-	end
+-- Iterate over all Hexes
+for HexData in Hexagen:AllHexes(HexList) do
+	...
+end
+
+-- Iterate over all Nodes
+for NodeData in Hexagen:AllNodes(HexList) do
+	...
+end
 ```
+
+To run a pathfinding query on a grid, use 
+```lua
+PathList = Hexagen:FindPath(HexList, PathType, StartingName, EndingName)
+```
+Where PathType is either "Hex" or "Node" to run a hex or node query. Starting/Ending Name are the name of the tiles for the path to start and end at
 
 For more information about how to use HexList, see addon_game_mode.lua

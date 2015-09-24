@@ -50,8 +50,8 @@ function Hexagen:GenerateHexagonGrid(GridCenter, HexRadius, PathWidth, LengthTab
 
 			for dim_3 = (dim_len * -1), dim_len do
 				if (dim_1 + dim_2 + dim_3) == 0 then
+					HexTable[dim_1][dim_2][dim_3] = {}
 				end
-				HexTable[dim_1][dim_2][dim_3] = {}
 			end
 		end
 	end
@@ -380,8 +380,8 @@ function Hexagen:GenerateHexagonGrid(GridCenter, HexRadius, PathWidth, LengthTab
 			table.insert(NodeData["neighbours"], HexData["nodes"][NextNeighbour])
 
 			-- Get the previous neighbour along the perimeter of this hex
-			local LastNeighbour = Num + 1
-			if LastNeighbour > 6 then LastNeighbour = LastNeighbour - 6 end
+			local LastNeighbour = Num - 1
+			if LastNeighbour < 1 then LastNeighbour = LastNeighbour + 6 end
 			table.insert(NodeData["neighbours"], HexData["nodes"][LastNeighbour])
 		end
 	end
@@ -407,4 +407,205 @@ function Hexagen:AllNodes(HexList)
 		i = i + 1
 		if i <= n then return HexList["Node_" .. i] end
 	end
+end
+
+-- use a* to find a path between two nodes
+function Hexagen:FindPath(HexList, PathType, StartingInd, EndingInd)
+	local OpenList = {}
+	local ClosedList = {}
+	local Map = {}
+
+	-- The movement cost will be the difference between Hex_0 and Hex_1 for the case of Hex Navigation
+	-- and the difference between Node_1 and Node_2 for the case of Node Navigation
+	local MovementCost = -1
+
+	-- Populate the map based on what kind of pathing we're doing
+	if string.lower(PathType) == "hex" then
+		for HexData in Hexagen:AllHexes(HexList) do
+			Map[HexData["name"]] = copy(HexData, {})
+		end
+		MovementCost = (Map["Hex_0"]["location"] - Map["Hex_1"]["location"]):Length2D()
+	elseif string.lower(PathType) == "node" then
+		for NodeData in Hexagen:AllNodes(HexList) do
+			Map[NodeData["name"]] = copy(NodeData, {})
+		end
+		MovementCost = (Map["Node_1"]["location"] - Map["Node_2"]["location"]):Length2D()
+	else
+		print ("[Hexagen:FindPath] Invalid PathType passed!")
+		return -1
+	end
+
+
+	-- Check that the starting and ending indexes are valid and different
+	if StartingInd == EndingInd then
+		print ("[Hexagen:FindPath] StartingInd and EndingInd are the same!")
+		return -1
+	elseif setContainsKey(Map, StartingInd) == false then
+		print ("[Hexagen:FindPath] Invalid StartingInd passed!")
+		return -1
+	elseif setContainsKey(Map, EndingInd) == false then
+		print ("[Hexagen:FindPath] Invalid EndingInd passed!")
+		return -1
+	end
+
+
+	-- Add the starting point to the OpenList with a G score of 0
+	Map[StartingInd]["GScore"] = 0
+	Map[StartingInd]["FScore"] = Hexagen:PathingEstimateDistance(Map, StartingInd, EndingInd)
+	table.insert(OpenList, Map[StartingInd])
+	local SolutionFound = false
+	local iterations = 0
+
+	-- Loop until we find a solution or determine it to be unsolvable
+	while true do
+
+		-- Search for the Lowest F Score on the open list
+		local LowestFScore = 999999
+		local LowestTileName = ""
+		for _, TileData in pairs(OpenList) do
+			if TileData["FScore"] < LowestFScore then
+				LowestFScore = TileData["FScore"]
+				LowestTileName = TileData["name"]
+			end
+		end
+
+		-- Remove this tile from the open list and add it to the closed list
+		for i, val in pairs(OpenList) do
+			if val["name"] == LowestTileName then
+				table.remove(OpenList, i)
+				break
+			end
+		end
+		table.insert(ClosedList, Map[LowestTileName])
+		iterations = iterations + 1
+
+		-- Check if we're finished
+
+		-- Finish case 1) ClosedList contains EndingInd
+		-- this means we found a solution
+		if ListContainsTile(ClosedList, Map[EndingInd]) == true then
+			SolutionFound = true
+			break
+		end
+
+		-- If the openlist is empty, there is no solution
+		if table.getn(OpenList) == 0 and iterations ~= 1 then
+			SolutionFound = false
+			break
+		end
+
+		-- Record this tiles G Score 
+		local ParentG = Map[LowestTileName]["GScore"]
+
+		-- Evaluate each of the neighbours
+		for _, NeighbourName in pairs(Map[LowestTileName]["neighbours"]) do
+			local NeighbourData = Map[NeighbourName]
+
+			-- If the neighbour is pathable and it's not on the closed list, evaluate it further
+			if NeighbourData["pathable"] == true and ListContainsTile(ClosedList, NeighbourData) == false then
+
+				-- G Score is the cost of moving from the parent to this node
+				local thisG = ParentG + MovementCost
+
+				-- H Score is the cost of moving from this node to the finish
+				-- We do a straight line cause we deleted the table with all the neighbours
+				local thisH = Hexagen:PathingEstimateDistance(Map, NeighbourName, EndingInd)
+
+				local thisF = thisG + thisH
+
+				-- Check if the tile is on the open list
+				if ListContainsTile(OpenList, NeighbourData) == true then
+
+					-- if the path from the start to this tile is now lower
+					-- lower it's scores
+					if NeighbourData["GScore"] > thisG then
+						NeighbourData["parentInd"] = LowestTileName
+
+						-- store the pathing scores
+						NeighbourData["FScore"] = thisF
+						NeighbourData["GScore"] = thisG
+						NeighbourData["HScore"] = thisH
+					end
+				else
+					-- store the pathing scores
+					NeighbourData["FScore"] = thisF
+					NeighbourData["GScore"] = thisG
+					NeighbourData["HScore"] = thisH
+
+					NeighbourData["parentInd"] = LowestTileName
+					table.insert(OpenList, NeighbourData)
+				end
+			end
+		end
+	end
+
+	-- Fetch the list if we found a solution
+	if SolutionFound == true then
+		local nextstep = Map[EndingInd]
+		local PathListR = {}
+		local PathList = {}
+
+		-- Traverse the parent indexes of the path to get the route in reverse
+		while true do
+			table.insert(PathListR, nextstep["name"])
+
+			-- Get the name of tne next parent, and store it
+			local parentName = nextstep["parentInd"]
+			local parent = Map[parentName]
+			nextstep = parent
+
+			-- if we find the starting point, we're finished
+			if nextstep["name"] == StartingInd then
+				break 
+			end
+		end
+		table.insert(PathListR, StartingInd)
+
+		-- Reverse the list to get the forward route
+		for i = table.getn(PathListR), 1, -1 do
+			table.insert(PathList, PathListR[i])
+		end
+		return PathList
+
+	elseif SolutionFound == false then
+		return nil
+	end
+end
+
+-- get an estimate of the score to the final node
+function Hexagen:PathingEstimateDistance(HexList, StartingInd, EndingInd)
+
+	local StartingVector = HexList[StartingInd]["location"]
+	local EndingVector = HexList[EndingInd]["location"]
+
+	return (EndingVector - StartingVector):Length2D()
+
+end
+
+-- Deep Copy for a lua table
+-- http://stackoverflow.com/questions/640642/how-do-you-copy-a-lua-table-by-value
+function copy(obj, seen)
+	if type(obj) ~= 'table' then return obj end
+	if seen and seen[obj] then return seen[obj] end
+	local s = seen or {}
+	local res = setmetatable({}, getmetatable(obj))
+	s[obj] = res
+	for k, v in pairs(obj) do res[copy(k, s)] = copy(v, s) end
+	return res
+end
+
+-- Check if a set contains a key
+-- http://stackoverflow.com/questions/2282444/how-to-check-if-a-table-contains-an-element-in-lua
+function setContainsKey(set, key)
+    return set[key] ~= nil
+end
+
+function ListContainsTile(list, tile)
+	local tilename = tile["name"]
+	for _, t in pairs(list) do
+		if t["name"] == tilename then
+			return true
+		end
+	end
+	return false
 end

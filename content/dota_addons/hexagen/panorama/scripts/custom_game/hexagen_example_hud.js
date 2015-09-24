@@ -1,6 +1,48 @@
 "use strict";
 
 var Length = {"A": 3, "B": 2, "C" : 2, "D" : 3, "E" : 2, "F" : 2, "PW": 32};
+var ToggleNodeMode = false;
+var ToggleHexMode = false;
+var HexList;
+
+var PATHING_STATE_FIRST_HEX = 1;
+var PATHING_STATE_FIRST_NODE = 2;
+var PATHING_STATE_SECOND_HEX = 3;
+var PATHING_STATE_SECOND_NODE = 4;
+var PATHING_STATE_COMPLETE = 5;
+var PathingQueryState = PATHING_STATE_COMPLETE;
+
+var PathingStart = -1;
+var PathingEnd = -1;
+
+function OnRecieveHexList(data)
+{	
+	$.Msg("Recieved HexList");
+	//$.Msg(data);
+	HexList = data;
+	
+	// Convert the string lua vectors to Vectors 
+	// Vector.js by Perry
+	// https://github.com/Perryvw/PanoramaUtils/blob/master/Vector.js
+	for (var i = 0; i<= HexList.HexCount; i++)
+	{
+		//$.Msg(HexList["Hex_" + i]["name"]);
+
+		var stringloc = HexList["Hex_" + i]["location"];
+		var vecloc = Vector.FromArray(stringloc.split(" ").map(Number));
+		HexList["Hex_" + i]["location"] = vecloc;
+	}
+	
+	for (var i = 1; i<= HexList.NodeCount; i++)
+	{
+		//$.Msg(HexList["Node_" + i]["name"]);
+
+		var stringloc = HexList["Node_" + i]["location"];
+		var vecloc = Vector.FromArray(stringloc.split(" ").map(Number));
+		HexList["Node_" + i]["location"] = vecloc;
+	}
+	
+}
 
 function HexygenLessButton(Direction)
 {
@@ -47,11 +89,164 @@ function HexygenMorePWButton()
 	$("#HexygenLengthLabelPW").text = Length[Direction]
 }
 
+function TogglePathing()
+{
+	$.Msg("Hex Pathing: " + $("#HexDrawPathingToggle").checked )
+	$.Msg("Node Pathing: " + $("#NodeDrawPathingToggle").checked )
+	GameEvents.SendCustomGameEventToServer( "draw_pathing", { "hex" : $("#HexDrawPathingToggle").checked, "node" : $("#NodeDrawPathingToggle").checked } );
+}
+
+function HexygenToggleHexes()
+{
+	var ToggleHexMode = $("#HexPathingToggle").checked
+	var ToggleNodeMode = $("#NodePathingToggle").checked
+
+	if (ToggleHexMode == true && ToggleNodeMode == true)
+		$("#NodePathingToggle").checked = false;
+}
+function HexygenToggleNodes()
+{
+	var ToggleHexMode = $("#HexPathingToggle").checked
+	var ToggleNodeMode = $("#NodePathingToggle").checked
+
+	if (ToggleHexMode == true && ToggleNodeMode == true)
+		$("#HexPathingToggle").checked = false;
+}
+
+function HexygenStartHexPathingQuery()
+{
+	$.Msg("Start Hex Pathing Query");
+	PathingQueryState = PATHING_STATE_FIRST_HEX;
+}
+
+function HexygenStartNodePathingQuery()
+{
+	$.Msg("Start Node Pathing Query");
+	PathingQueryState = PATHING_STATE_FIRST_NODE;
+}
+
 function HexygenRegen()
 {
 	GameEvents.SendCustomGameEventToServer( "change_length", { "length_table" : Length } );
 }
 
 (function () {
-	$.Msg("Hexagen Example HUD JS Loaded.");
+	$.Msg("Hexagen Example HUD JS Loaded."); 
+
+	GameEvents.Subscribe("send_hexlist_to_client", OnRecieveHexList);
+	GameEvents.SendCustomGameEventToServer( "request_hexlist", {  } );
 })();
+
+function FindClosestHex(SearchLocation)
+{
+
+		var mindist = 999999;
+		var closestNode = -1;
+
+		for (var i = 0; i<= HexList.HexCount; i++)
+		{
+			var diff = SearchLocation.minus(HexList["Hex_" + i]["location"]);
+			var dist = diff.length2D();
+			//$.Msg("(" + i + ") dist: " + dist);
+			if (dist < mindist)
+			{
+				closestNode = i;
+				mindist = dist;
+			}
+		}
+		//$.Msg("Closest to : Hex_" + closestNode + " (" + mindist + ")");
+		return ("Hex_" + closestNode);
+}
+
+function FindClosestNode(SearchLocation)
+{
+
+		var mindist = 999999;
+		var closestNode = -1;
+
+		for (var i = 1; i<= HexList.NodeCount; i++)
+		{
+			var diff = SearchLocation.minus(HexList["Node_" + i]["location"]);
+			var dist = diff.length2D();
+			//$.Msg("(" + i + ") dist: " + dist);
+			if (dist < mindist)
+			{
+				closestNode = i;
+				mindist = dist;
+			}
+		}
+		//$.Msg("Closest to : Node_" + closestNode + " (" + mindist + ")");
+		return ("Node_" + closestNode);
+}
+
+function OnLeftClick(ClickLocation)
+{
+	//$.Msg("Left Click!");
+	var click = Vector.FromArray(GameUI.GetScreenWorldPosition( ClickLocation ));
+
+	var ToggleHexMode = $("#HexPathingToggle").checked
+	var ToggleNodeMode = $("#NodePathingToggle").checked
+
+	if (PathingQueryState == PATHING_STATE_FIRST_HEX)
+	{
+		PathingStart = FindClosestHex(click);
+		PathingQueryState = PATHING_STATE_SECOND_HEX;
+
+		$.Msg("[Hex Pathing Query] First Hex Found: " + PathingStart);
+	}
+	else if (PathingQueryState == PATHING_STATE_SECOND_HEX)
+	{
+		PathingEnd = FindClosestHex(click);
+		GameEvents.SendCustomGameEventToServer( "pathing_query", { "type" : "hex", "start" : PathingStart, "finish" : PathingEnd } );
+		PathingQueryState = PATHING_STATE_COMPLETE;
+
+		$.Msg("[Hex Pathing Query] Second Hex Found: " + PathingEnd);
+	}
+	else if (PathingQueryState == PATHING_STATE_FIRST_NODE)
+	{
+		PathingStart = FindClosestNode(click);
+		PathingQueryState = PATHING_STATE_SECOND_NODE;
+
+		$.Msg("[Node Pathing Query] First Node Found: " + PathingStart);
+	}
+	else if (PathingQueryState == PATHING_STATE_SECOND_NODE)
+	{
+		PathingEnd = FindClosestNode(click);
+		GameEvents.SendCustomGameEventToServer( "pathing_query", { "type" : "node", "start" : PathingStart, "finish" : PathingEnd } );
+		PathingQueryState = PATHING_STATE_COMPLETE;
+
+		$.Msg("[Node Pathing Query] First Second Found: " + PathingEnd); 
+	}
+	else if (ToggleHexMode == true)
+	{
+		GameEvents.SendCustomGameEventToServer( "toggle_hexlist_pathing", { "ind" : FindClosestHex(click) } );
+	}
+	else if (ToggleNodeMode == true)
+	{
+		GameEvents.SendCustomGameEventToServer( "toggle_hexlist_pathing", { "ind" : FindClosestNode(click) } );
+	}
+
+}
+
+GameUI.SetMouseCallback( function( eventName, arg ) {
+	var CONSUME_EVENT = true;
+	var CONTINUE_PROCESSING_EVENT = false;
+
+	if ( GameUI.GetClickBehaviors() !== CLICK_BEHAVIORS.DOTA_CLICK_BEHAVIOR_NONE )
+		return CONTINUE_PROCESSING_EVENT;
+
+	if ( eventName == "pressed" )
+	{
+		if (arg === 0)
+		{
+			OnLeftClick(GameUI.GetCursorPosition());
+		}
+
+		// Disable right-click
+		if ( arg === 1 )
+		{
+			return CONSUME_EVENT;
+		}
+	}
+	return CONTINUE_PROCESSING_EVENT;
+} );
