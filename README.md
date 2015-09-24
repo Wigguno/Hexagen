@@ -1,7 +1,7 @@
 # Hexagen
 Hexagon grid generator for Dota 2 custom games
 
-Hexagen utilizes cube coordinates as presented by Amit Patel  
+Hexagen utilizes cube coordinates as presented by Amit Patel for generation
 http://www.redblobgames.com/grids/hexagons/
 
 Example Results:  
@@ -21,29 +21,29 @@ LengthTable (Table): A table that defines the length of each of the 6 legs
 
 Example:  
 ```lua
-HexList = Hexagen:GenerateHexagonGrid(Vector(0, 0, 128), 64, 32, {3, 2, 2, 3, 2, 2}))
+TileList = Hexagen:GenerateHexagonGrid(Vector(0, 0, 128), 64, 32, {3, 2, 2, 3, 2, 2}))
 ```
 
-HexList is a table of all hex tiles and nodes in the grid. Each key is the name. Each value is a table that contains information about the hex/node, such as location, neighbours, and if it's pathable or not  
-HexList also contains two number values, the number of hexes, and the number of nodes. These are stored with keys "HexCount" and "NodeCount"
+TileList stores a list of all Hexes and Nodes, as well as the count of each
 
-Hexagen also includes iterators to iterate over the results of a HexList
+Hexagen also includes iterators to iterate over the results of a TileList
 ```lua
 -- Iterate over all Hexes
-for HexData in Hexagen:AllHexes(HexList) do
+for HexData in TileList:AllHexes() do
 	...
 end
 
 -- Iterate over all Nodes
-for NodeData in Hexagen:AllNodes(HexList) do
+for NodeData in TileList:AllNodes() do
 	...
 end
 ```
 
 To run a pathfinding query on a grid, use 
 ```lua
-PathList = Hexagen:FindPath(HexList, PathType, StartingName, EndingName)
-PathList = Hexagen:FindPath(HexList, "Node", "Node_21", "Node_1")
+PathList = TileList:FindPath(PathType, StartingName, EndingName)
+PathList = TileList:FindPath("Node", "Node_21", "Node_1")
+PathList = TileList:FindPath("Hex", "Hex_12", "Hex_3")
 ```
 Where PathType is either "Hex" or "Node" to run a hex or node query. Starting/Ending Name are the name of the tiles for the path to start and end at
 

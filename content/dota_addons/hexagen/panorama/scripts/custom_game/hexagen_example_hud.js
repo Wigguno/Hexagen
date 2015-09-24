@@ -1,11 +1,11 @@
 "use strict";
 
-var Length = {"A": 3, "B": 2, "C" : 2, "D" : 3, "E" : 2, "F" : 2, "PW": 32};
+var Length = {"A": 3, "B": 2, "C" : 2, "D" : 3, "E" : 2, "F" : 2, "PW": 32}; 
 var ToggleNodeMode = false;
 var ToggleHexMode = false;
 var WaitingForHexClick = false;
 var WaitingForNodeClick = false;
-var HexList;
+var TileList;
 
 var PATHING_STATE_FIRST_HEX = 1;
 var PATHING_STATE_FIRST_NODE = 2;
@@ -21,27 +21,23 @@ function OnRecieveHexList(data)
 {	
 	$.Msg("Recieved HexList");
 	//$.Msg(data);
-	HexList = data;
+	TileList = data;
 	
 	// Convert the string lua vectors to Vectors 
 	// Vector.js by Perry
 	// https://github.com/Perryvw/PanoramaUtils/blob/master/Vector.js
-	for (var i = 0; i<= HexList.HexCount; i++)
+	for (var i = 1; i<= TileList.HexCount; i++)
 	{
-		//$.Msg(HexList["Hex_" + i]["name"]);
-
-		var stringloc = HexList["Hex_" + i]["location"];
+		var stringloc = TileList.HexList["Hex_" + i].Location;
 		var vecloc = Vector.FromArray(stringloc.split(" ").map(Number));
-		HexList["Hex_" + i]["location"] = vecloc;
+		TileList.HexList["Hex_" + i].Location = vecloc;
 	}
 	
-	for (var i = 1; i<= HexList.NodeCount; i++)
+	for (var i = 1; i<= TileList.NodeCount; i++)
 	{
-		//$.Msg(HexList["Node_" + i]["name"]);
-
-		var stringloc = HexList["Node_" + i]["location"];
+		var stringloc = TileList.NodeList["Node_" + i].Location;
 		var vecloc = Vector.FromArray(stringloc.split(" ").map(Number));
-		HexList["Node_" + i]["location"] = vecloc;
+		TileList.NodeList["Node_" + i].Location = vecloc;
 	}
 	
 }
@@ -93,8 +89,8 @@ function HexygenMorePWButton()
 
 function TogglePathing()
 {
-	$.Msg("Hex Pathing: " + $("#HexDrawPathingToggle").checked )
-	$.Msg("Node Pathing: " + $("#NodeDrawPathingToggle").checked )
+	//$.Msg("Hex Pathing: " + $("#HexDrawPathingToggle").checked )
+	//$.Msg("Node Pathing: " + $("#NodeDrawPathingToggle").checked )
 	GameEvents.SendCustomGameEventToServer( "draw_pathing", { "hex" : $("#HexDrawPathingToggle").checked, "node" : $("#NodeDrawPathingToggle").checked } );
 }
 
@@ -156,9 +152,9 @@ function FindClosestHex(SearchLocation)
 		var mindist = 999999;
 		var closestNode = -1;
 
-		for (var i = 0; i<= HexList.HexCount; i++)
+		for (var i = 1; i<= TileList.HexCount; i++)
 		{
-			var diff = SearchLocation.minus(HexList["Hex_" + i]["location"]);
+			var diff = SearchLocation.minus(TileList.HexList["Hex_" + i].Location);
 			var dist = diff.length2D();
 			//$.Msg("(" + i + ") dist: " + dist);
 			if (dist < mindist)
@@ -177,9 +173,9 @@ function FindClosestNode(SearchLocation)
 		var mindist = 999999;
 		var closestNode = -1;
 
-		for (var i = 1; i<= HexList.NodeCount; i++)
+		for (var i = 1; i<= TileList.NodeCount; i++)
 		{
-			var diff = SearchLocation.minus(HexList["Node_" + i]["location"]);
+			var diff = SearchLocation.minus(TileList.NodeList["Node_" + i].Location);
 			var dist = diff.length2D();
 			//$.Msg("(" + i + ") dist: " + dist);
 			if (dist < mindist)

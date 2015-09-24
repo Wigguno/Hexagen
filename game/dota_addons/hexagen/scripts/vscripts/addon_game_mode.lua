@@ -96,16 +96,19 @@ function CHexygenGameMode:RegenHexes()
 	self.drawNeighboursTarget = nil -- reset the draw neighbours target
 
 	-- Call Hexagen
-	self.HexList = Hexagen:GenerateHexagonGrid(Vector(0, 0, 128), 64, self.PathWidth, self.LengthTable)
+	self.TileList = Hexagen:GenerateHexagonGrid(Vector(0, 0, 128), 64, self.PathWidth, self.LengthTable)
+
+	print("HexCount: " .. self.TileList.HexCount)
+	print("NodeCount: " .. self.TileList.NodeCount)
 
 	-- Send the list to panorama so it can do stuff with it
-	CustomGameEventManager:Send_ServerToAllClients( "send_hexlist_to_client", self.HexList )
+	CustomGameEventManager:Send_ServerToAllClients( "send_hexlist_to_client", self.TileList )
 
 	-- Spawn hexagons on every hex
-	for HexData in Hexagen:AllHexes(self.HexList) do
+	for HexData in self.TileList:AllHexes() do
 
 		-- spawn a hexagon.
-		table.insert(self.Hexygen_EntHexList, self:SpawnHex(HexData["location"]))
+		table.insert(self.Hexygen_EntHexList, self:SpawnHex(HexData.Location))
 	end
 end
 
@@ -143,7 +146,7 @@ end
 function CHexygenGameMode:OnRequestHexList()
 	local mode = GameRules.HexyGen
 	-- Send the list to panorama so it can do stuff with it
-	CustomGameEventManager:Send_ServerToAllClients( "send_hexlist_to_client", mode.HexList )
+	CustomGameEventManager:Send_ServerToAllClients( "send_hexlist_to_client", mode.TileList )
 end
 
 function CHexygenGameMode:OnChangeDrawSettings(keys)
@@ -160,11 +163,23 @@ function CHexygenGameMode:OnToggleHexListPathing(keys)
 
 	-- Toggle the pathable state of the passed index
 	-- Panorama has already found the closest node to this point
-	if mode.HexList[keys.ind]["pathable"] == true then
-		mode.HexList[keys.ind]["pathable"] = false
-	elseif mode.HexList[keys.ind]["pathable"] == false then
-		mode.HexList[keys.ind]["pathable"] = true
+
+	if mode.TileList.HexList[keys.ind] then
+		if mode.TileList.HexList[keys.ind].Pathable == true then
+			mode.TileList.HexList[keys.ind].Pathable = false
+		elseif mode.TileList.HexList[keys.ind].Pathable == false then
+			mode.TileList.HexList[keys.ind].Pathable = true
+		end
+
+	elseif mode.TileList.NodeList[keys.ind] then
+		if mode.TileList.NodeList[keys.ind].Pathable == true then
+			mode.TileList.NodeList[keys.ind].Pathable = false
+		elseif mode.TileList.NodeList[keys.ind].Pathable == false then
+			mode.TileList.NodeList[keys.ind].Pathable = true
+		end
+
 	end
+
 end
 
 function CHexygenGameMode:OnDrawNeighbours(keys)
@@ -177,7 +192,8 @@ end
 function CHexygenGameMode:OnPathingQuery(keys)
 	local mode = GameRules.HexyGen
 	--PrintTable(keys)
-	local PathIndList = Hexagen:FindPath(mode.HexList, keys.type, keys.start, keys.finish)
+	
+	local PathIndList = mode.TileList:FindPath(keys.type, keys.start, keys.finish)
 
 	if PathIndList == nil then
 		print("path not found!")
@@ -193,80 +209,103 @@ function CHexygenGameMode:OnThink()
 	if GameRules:State_Get() == DOTA_GAMERULES_STATE_GAME_IN_PROGRESS then
 		
 	local draw_time = 1.00
-	
+
 	-- Draw the PathFinding path if there is one
 	if self.DrawPath ~= nil then
-		local LastLoc = self.HexList[self.DrawPath[1]]
-		for _, Name in pairs(self.DrawPath) do
-			local Data = self.HexList[Name]
-			DebugDrawLine(LastLoc["location"], Data["location"], 0, 0, 255, true, draw_time)
-			LastLoc = Data
+		if self.TileList.HexList[self.DrawPath[1]] then
+
+			local LastLoc = self.TileList.HexList[self.DrawPath[1]]
+			for _, Name in pairs(self.DrawPath) do
+				local Data = self.TileList.HexList[Name]
+				DebugDrawLine(LastLoc.Location, Data.Location, 0, 0, 255, true, draw_time)
+				LastLoc = Data
+			end
+		elseif self.TileList.NodeList[self.DrawPath[1]] then 
+
+			local LastLoc = self.TileList.NodeList[self.DrawPath[1]]
+			for _, Name in pairs(self.DrawPath) do
+				local Data = self.TileList.NodeList[Name]
+				DebugDrawLine(LastLoc.Location, Data.Location, 0, 0, 255, true, draw_time)
+				LastLoc = Data
+			end
 		end
 	end
 
 	if self.drawNeighboursTarget ~= nil then
-		local t = self.HexList[self.drawNeighboursTarget]
-		for _, n in pairs(t["neighbours"]) do
-			DebugDrawLine(t["location"], self.HexList[n]["location"], 0, 255, 0, true, draw_time)
+		local t = nil
+		if self.TileList.HexList[self.drawNeighboursTarget] then
+			t = self.TileList.HexList[self.drawNeighboursTarget]
+			
+			for n in t:AllNeighbours() do
+				DebugDrawLine(t.Location, self.TileList.HexList[n].Location, 255, 255, 0, true, draw_time)
+			end
+
+		elseif self.TileList.NodeList[self.drawNeighboursTarget] then
+			t = self.TileList.NodeList[self.drawNeighboursTarget]
+
+			for n in t:AllNeighbours() do
+				DebugDrawLine(t.Location, self.TileList.NodeList[n].Location, 255, 255, 0, true, draw_time)
+			end
 		end
 	end
 
-
 	if self.draw_pathing_hexes == 1 then
 
-		-- Example Use of HexList
-		for HexData in Hexagen:AllHexes(self.HexList) do
+		-- Example Use of TileList
+		for HexData in self.TileList:AllHexes() do
 
 			-- Default to white
 			local colour = Vector(255, 255, 255)
 
 			-- if this hex is pathable
-			if HexData["pathable"] == true then
+			if HexData.Pathable == true then
 
 				-- draw it in green
 				colour = Vector(0, 255, 0)
 
 				-- and link it to it's neighbours (in green)
-				for NeighbourNum, NeighbourName in pairs(HexData["neighbours"]) do
-					local NeighbourData = self.HexList[NeighbourName]
+				for NeighbourName in HexData.AllNeighbours() do
+					local NeighbourData = self.TileList.HexList[NeighbourName]
 
 					-- only link to pathable neighbours
-					if NeighbourData["pathable"] == true then
-						DebugDrawLine(HexData["location"], NeighbourData["location"], 0, 255, 0, true, draw_time)
+					if NeighbourData.Pathable == true then
+						DebugDrawLine(HexData.Location, NeighbourData.Location, 0, 255, 0, true, draw_time)
 					end
 				end
 
 			-- if it's not pathable then draw it in red, and don't link it to its neighbours
-			elseif HexData["pathable"] == false then
+			elseif HexData.Pathable == false then
 				colour = Vector(255, 0, 0)
 			end
 			
 			-- draw the circle
-			DebugDrawCircle(HexData["location"], colour, 20, 64, true, draw_time)
+			DebugDrawCircle(HexData.Location, colour, 20, 64, true, draw_time)
 		end
 	end
+
 	if self.draw_pathing_nodes == 1 then
 		-- loop over all nodes and do the same thing as hexes
-		for NodeData in Hexagen:AllNodes(self.HexList) do
+		for NodeData in self.TileList:AllNodes() do
 
 			local colour = Vector(255, 255, 255)
-			if NodeData["pathable"] == true then
+			if NodeData.Pathable == true then
 				colour = Vector(0, 255, 0)
 
-				for _, NeighbourName in pairs(NodeData["neighbours"]) do
-					local NeighbourData = self.HexList[NeighbourName]
+				for NeighbourName in NodeData.AllNeighbours() do
+					local NeighbourData = self.TileList.NodeList[NeighbourName]
 
-					if NeighbourData["pathable"] == true then
-						DebugDrawLine(NodeData["location"], NeighbourData["location"], 0, 255, 0, true, draw_time)
+					if NeighbourData.Pathable == true then
+						DebugDrawLine(NodeData.Location, NeighbourData.Location, 0, 255, 0, true, draw_time)
 					end
 				end
-			elseif NodeData["pathable"] == false then
+			elseif NodeData.Pathable == false then
 				colour = Vector(255, 0, 0)
 			end
 
-			DebugDrawCircle(NodeData["location"], colour, 20, 5, true, draw_time)	
+			DebugDrawCircle(NodeData.Location, colour, 20, 5, true, draw_time)	
 		end	
 	end
+
 
 
 	elseif GameRules:State_Get() >= DOTA_GAMERULES_STATE_POST_GAME then
