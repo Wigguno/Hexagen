@@ -10,6 +10,8 @@ http://i.imgur.com/eY94qGS.jpg
 http://i.imgur.com/a2DKdzC.jpg  
 http://i.imgur.com/yqYCS8o.jpg
 
+Unfortunately there is no way to index a specific tile, so the best uses will be random generation, or for user-created grids
+
 # How To Use
 ```lua
 Hexagen:GenerateHexagonGrid(GridCenter, HexRadius, PathWidth, LengthTable)

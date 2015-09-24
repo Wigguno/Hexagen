@@ -6,8 +6,7 @@
 
 if Hexagen == nil then
 	print("Loading Hexagen by wigguno")
-	Hexagen = {}
-	Hexagen.__index = Hexagen
+	Hexagen = class({})
 end
 
 if TileList == nil then
