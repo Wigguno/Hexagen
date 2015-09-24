@@ -26,6 +26,7 @@ function CHexygenGameMode:InitGameMode()
 	print( "Hexagen Example is loading..." )
 
 	self.Hexygen_EntHexList = {}
+	self.PathWidth = 32
 	self.LengthTable = {}
 	self.LengthTable[1] = 3
 	self.LengthTable[2] = 2
@@ -84,20 +85,79 @@ function CHexygenGameMode:RegenHexes()
 	self.Hexygen_EntHexList = {}
 
 	-- Call Hexagen
-	local HexList = Hexagen:GenerateHexagonGrid(Vector(0, 0, 128), 64, 32, self.LengthTable)
+	local HexList = Hexagen:GenerateHexagonGrid(Vector(0, 0, 128), 64, self.PathWidth, self.LengthTable)
 
 	local draw_time = 10
+	local display = "both"
+
+	if display == "hex" or display == "both" then
+
+		-- Set some random hexes to unpathable
+		HexList["Hex_" .. RandomInt(0, HexList["HexCount"])]["pathable"] = false
+		HexList["Hex_" .. RandomInt(0, HexList["HexCount"])]["pathable"] = false
+		HexList["Hex_" .. RandomInt(0, HexList["HexCount"])]["pathable"] = false
+		HexList["Hex_" .. RandomInt(0, HexList["HexCount"])]["pathable"] = false
+		HexList["Hex_" .. RandomInt(0, HexList["HexCount"])]["pathable"] = false
+
+		-- Example Use of HexList
+		for HexNum = 0, HexList["HexCount"] do
+			local HexName = "Hex_" .. HexNum
+			local HexData = HexList[HexName]
+
+			local colour = Vector(255, 255, 255)
+			if HexData["pathable"] == true then
+				colour = Vector(0, 255, 0)
+
+				for NeighbourNum, NeighbourName in pairs(HexData["neighbours"]) do
+					local NeighbourData = HexList[NeighbourName]
+
+					if NeighbourData["pathable"] == true then
+						DebugDrawLine(HexData["location"], NeighbourData["location"], 0, 255, 0, true, draw_time)
+					end
+				end
+			elseif HexData["pathable"] == false then
+				colour = Vector(255, 0, 0)
+			end
+			
+			DebugDrawCircle(HexData["location"], colour, 20, 64, true, draw_time)
+		end
+	end
+	if display == "node" or display == "both" then
+		-- Set some random nodes to unpathable
+		
+		HexList["Node_" .. RandomInt(0, HexList["NodeCount"])]["pathable"] = false
+		HexList["Node_" .. RandomInt(0, HexList["NodeCount"])]["pathable"] = false
+		HexList["Node_" .. RandomInt(0, HexList["NodeCount"])]["pathable"] = false
+		HexList["Node_" .. RandomInt(0, HexList["NodeCount"])]["pathable"] = false
+		HexList["Node_" .. RandomInt(0, HexList["NodeCount"])]["pathable"] = false
+		for NodeNum = 1, HexList["NodeCount"] do
+			local NodeName = "Node_" .. NodeNum
+			local NodeData = HexList[NodeName]
+
+			local colour = Vector(255, 255, 255)
+			if NodeData["pathable"] == true then
+				colour = Vector(0, 255, 0)
+
+				for _, NeighbourName in pairs(NodeData["neighbours"]) do
+					local NeighbourData = HexList[NeighbourName]
+
+					if NeighbourData["pathable"] == true then
+						DebugDrawLine(NodeData["location"], NeighbourData["location"], 0, 255, 0, true, draw_time)
+					end
+				end
+			elseif NodeData["pathable"] == false then
+				colour = Vector(255, 0, 0)
+			end
+
+			DebugDrawCircle(NodeData["location"], colour, 20, 5, true, draw_time)	
+
+		end
+	end
 
 	-- Example Use of HexList
-	for HexName, HexData in pairs(HexList) do 
-
-		--DebugDrawCircle(HexData["location"], Vector(255, 255, 255), 20, HEX_RADIUS, true, draw_time)
-
-		-- Draw lines to each neighbour
-		for _, NeighbourName in pairs(HexData["neighbours"]) do
-			local HexNeighbour = HexList[NeighbourName]
-			DebugDrawLine(HexData["location"], HexNeighbour["location"], 255, 255, 255, true, draw_time) 
-		end
+	for HexNum = 0, HexList["HexCount"] do
+		local HexName = "Hex_" .. HexNum
+		local HexData = HexList[HexName]
 
 		-- spawn a hexagon.
 		table.insert(self.Hexygen_EntHexList, self:SpawnHex(HexData["location"]))
@@ -130,6 +190,7 @@ function CHexygenGameMode:OnChangeLengthSettings(keys)
 	mode.LengthTable[4] = keys.length_table.D
 	mode.LengthTable[5] = keys.length_table.E
 	mode.LengthTable[6] = keys.length_table.F
+	mode.PathWidth 		= keys.length_table.PW
 
 	mode:RegenHexes()
 end

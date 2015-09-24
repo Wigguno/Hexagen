@@ -7,6 +7,7 @@ http://www.redblobgames.com/grids/hexagons/
 Example Results:  
 http://i.imgur.com/ZU7MQvs.jpg  
 http://i.imgur.com/eY94qGS.jpg
+http://i.imgur.com/a2DKdzC.jpg
 
 # How To Use
 

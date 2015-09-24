@@ -146,6 +146,22 @@
 
 		</Panel>
 		<Panel class="HexygenLengthRow" hittest="false" >
+
+			<Label class="HexygenLengthLabelName" text="Path Width: " hittest="false" />
+			<Panel class="HexygenButtonContainer" hittest="false">
+				<Button class="HexygenLessButton" id="HexygenLessButtonPW" onactivate="HexygenLessPWButton()" >
+					<Label class="HexygenButtonLabel" text="&lt;" hittest="false" /> 
+				</Button>
+
+				<Label class="HexygenLengthLabel" id="HexygenLengthLabelPW" text="32" hittest="false" />
+
+				<Button class="HexygenMoreButton" id="HexygenMoreButtonPW" onactivate="HexygenMorePWButton()" >
+					<Label class="HexygenButtonLabel" text="&gt;" hittest="false" /> 
+				</Button>
+			</Panel>
+
+		</Panel>
+		<Panel class="HexygenLengthRow" hittest="false" >
 			<Button class="HexygenRegenButton" onactivate="HexygenRegen()" >
 				<Label class="HexygenRegenLabel" text="Regenerate Grid" hittest="false" />
 			</Button>
