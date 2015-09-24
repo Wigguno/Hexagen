@@ -235,9 +235,13 @@ function CHexygenGameMode:OnThink()
 		local t = nil
 		if self.TileList.HexList[self.drawNeighboursTarget] then
 			t = self.TileList.HexList[self.drawNeighboursTarget]
-			
+
 			for n in t:AllNeighbours() do
 				DebugDrawLine(t.Location, self.TileList.HexList[n].Location, 255, 255, 0, true, draw_time)
+			end
+
+			for _, h in pairs(t.Nodes) do
+				DebugDrawLine(t.Location, self.TileList.NodeList[h].Location, 255, 255, 0, true, draw_time)
 			end
 
 		elseif self.TileList.NodeList[self.drawNeighboursTarget] then
@@ -245,6 +249,10 @@ function CHexygenGameMode:OnThink()
 
 			for n in t:AllNeighbours() do
 				DebugDrawLine(t.Location, self.TileList.NodeList[n].Location, 255, 255, 0, true, draw_time)
+			end
+
+			for _, h in pairs(t.Hexes) do
+				DebugDrawLine(t.Location, self.TileList.HexList[h].Location, 255, 255, 0, true, draw_time)
 			end
 		end
 	end

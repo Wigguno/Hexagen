@@ -344,6 +344,7 @@ function Hexagen:GenerateHexagonGrid(GridCenter, HexRadius, PathWidth, LengthTab
 	-- which is the direction of the node. Using this we can pick the right direction neighbouring tile
 	-- which our node will link to
 
+	-- Also insert information about the surrounding hexes 
 	for HexData in TileList:AllHexes() do
 		
 		-- Find neighbours for each node on each hex
@@ -392,8 +393,13 @@ function Hexagen:GenerateHexagonGrid(GridCenter, HexRadius, PathWidth, LengthTab
 			local LastNeighbour = Num - 1
 			if LastNeighbour < 1 then LastNeighbour = LastNeighbour + 6 end
 			table.insert(NodeData.Neighbours, HexData.Nodes[LastNeighbour])
+
+			-- Add this hex to the nodes table
+			table.insert(NodeData.Hexes, HexData.Name)
 		end
 	end
+
+
 
 	return TileList
 end
