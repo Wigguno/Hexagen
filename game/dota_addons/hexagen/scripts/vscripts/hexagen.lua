@@ -388,3 +388,23 @@ function Hexagen:GenerateHexagonGrid(GridCenter, HexRadius, PathWidth, LengthTab
 
 	return HexList
 end
+
+-- An iterator the hexes
+function Hexagen:AllHexes(HexList)
+	local i = -1
+	local n = HexList["HexCount"]
+	return function()
+		i = i + 1
+		if i <= n then return HexList["Hex_" .. i] end
+	end
+end
+
+-- An iterator the nodes
+function Hexagen:AllNodes(HexList)
+	local i = 0
+	local n = HexList["NodeCount"]
+	return function()
+		i = i + 1
+		if i <= n then return HexList["Node_" .. i] end
+	end
+end

@@ -93,16 +93,14 @@ function CHexygenGameMode:RegenHexes()
 	if display == "hex" or display == "both" then
 
 		-- Set some random hexes to unpathable
-		HexList["Hex_" .. RandomInt(0, HexList["HexCount"])]["pathable"] = false
-		HexList["Hex_" .. RandomInt(0, HexList["HexCount"])]["pathable"] = false
-		HexList["Hex_" .. RandomInt(0, HexList["HexCount"])]["pathable"] = false
-		HexList["Hex_" .. RandomInt(0, HexList["HexCount"])]["pathable"] = false
-		HexList["Hex_" .. RandomInt(0, HexList["HexCount"])]["pathable"] = false
+		for i = 1,10 do
+			HexList["Hex_" .. i]["pathable"] = false
+		end
+
+		--HexList["Hex_" .. RandomInt(0, HexList["HexCount"])]["pathable"] = false
 
 		-- Example Use of HexList
-		for HexNum = 0, HexList["HexCount"] do
-			local HexName = "Hex_" .. HexNum
-			local HexData = HexList[HexName]
+		for HexData in Hexagen:AllHexes(HexList) do
 
 			local colour = Vector(255, 255, 255)
 			if HexData["pathable"] == true then
@@ -123,16 +121,15 @@ function CHexygenGameMode:RegenHexes()
 		end
 	end
 	if display == "node" or display == "both" then
-		-- Set some random nodes to unpathable
+
+		-- Set some nodes to unpathable		
+		for i = 1,30 do
+			HexList["Node_" .. i]["pathable"] = false
+		end
+
+		--HexList["Node_" .. RandomInt(1, HexList["NodeCount"])]["pathable"] = false
 		
-		HexList["Node_" .. RandomInt(0, HexList["NodeCount"])]["pathable"] = false
-		HexList["Node_" .. RandomInt(0, HexList["NodeCount"])]["pathable"] = false
-		HexList["Node_" .. RandomInt(0, HexList["NodeCount"])]["pathable"] = false
-		HexList["Node_" .. RandomInt(0, HexList["NodeCount"])]["pathable"] = false
-		HexList["Node_" .. RandomInt(0, HexList["NodeCount"])]["pathable"] = false
-		for NodeNum = 1, HexList["NodeCount"] do
-			local NodeName = "Node_" .. NodeNum
-			local NodeData = HexList[NodeName]
+		for NodeData in Hexagen:AllNodes(HexList) do
 
 			local colour = Vector(255, 255, 255)
 			if NodeData["pathable"] == true then
@@ -154,10 +151,8 @@ function CHexygenGameMode:RegenHexes()
 		end
 	end
 
-	-- Example Use of HexList
-	for HexNum = 0, HexList["HexCount"] do
-		local HexName = "Hex_" .. HexNum
-		local HexData = HexList[HexName]
+	-- Spawn hexagons on every hex
+	for HexData in Hexagen:AllHexes(HexList) do
 
 		-- spawn a hexagon.
 		table.insert(self.Hexygen_EntHexList, self:SpawnHex(HexData["location"]))
