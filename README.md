@@ -6,7 +6,7 @@ http://www.redblobgames.com/grids/hexagons/
 
 Example Results:  
 http://i.imgur.com/ZU7MQvs.jpg  
-http://i.imgur.com/eY94qGS.jpg
+http://i.imgur.com/eY94qGS.jpg  
 http://i.imgur.com/a2DKdzC.jpg
 
 # How To Use
@@ -21,6 +21,13 @@ LengthTable (Table): A table that defines the length of each of the 6 legs
 Example:  
 HexList = Hexagen:GenerateHexagonGrid(Vector(0, 0, 128, 64, 32, {3, 2, 2, 3, 2, 2}))
 
-HexList is a table of all hex tiles in the grid. Each key is the name of the hexagon. Each value is a table that contains the vector location, and a table of all neighbouring tile keys
+HexList is a table of all hex tiles and nodes in the grid. Each key is the name. Each value is a table that contains information about the hex/node, such as location, neighbours, and if it's pathable or not
+
+The hexes can be iterated using
+    for HexData in Hexagen:AllHexes(HexList) do
+		...
+	end
+	
+The nodes can be iterated similarly, using AllNodes instead of AllHexes.
 
 For more information about how to use HexList, see addon_game_mode.lua
