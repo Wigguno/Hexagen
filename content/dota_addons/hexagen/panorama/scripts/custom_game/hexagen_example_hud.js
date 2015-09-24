@@ -3,6 +3,8 @@
 var Length = {"A": 3, "B": 2, "C" : 2, "D" : 3, "E" : 2, "F" : 2, "PW": 32};
 var ToggleNodeMode = false;
 var ToggleHexMode = false;
+var WaitingForHexClick = false;
+var WaitingForNodeClick = false;
 var HexList;
 
 var PATHING_STATE_FIRST_HEX = 1;
@@ -124,6 +126,17 @@ function HexygenStartNodePathingQuery()
 	$.Msg("Start Node Pathing Query");
 	PathingQueryState = PATHING_STATE_FIRST_NODE;
 }
+function HexygenDrawHexNeighbours()
+{
+	$.Msg("Click to draw hex")
+	WaitingForHexClick = true;
+}
+
+function HexygenDrawNodeNeighbours()
+{
+	$.Msg("Click to draw node");
+	WaitingForNodeClick = true;
+}
 
 function HexygenRegen()
 {
@@ -216,6 +229,18 @@ function OnLeftClick(ClickLocation)
 		PathingQueryState = PATHING_STATE_COMPLETE;
 
 		$.Msg("[Node Pathing Query] First Second Found: " + PathingEnd); 
+	}
+	else if (WaitingForHexClick == true)
+	{
+		$.Msg("sending hex to draw neighbours")
+		GameEvents.SendCustomGameEventToServer( "draw_neighbours", { "ind" : FindClosestHex(click) } );
+		WaitingForHexClick= false;
+	}
+	else if (WaitingForNodeClick == true)
+	{
+		$.Msg("sending node to draw neighbours")
+		GameEvents.SendCustomGameEventToServer( "draw_neighbours", { "ind" : FindClosestNode(click) } );
+		WaitingForNodeClick = false;
 	}
 	else if (ToggleHexMode == true)
 	{

@@ -7,7 +7,7 @@ http://www.redblobgames.com/grids/hexagons/
 Example Results:  
 http://i.imgur.com/ZU7MQvs.jpg  
 http://i.imgur.com/eY94qGS.jpg  
-http://i.imgur.com/a2DKdzC.jpg
+http://i.imgur.com/a2DKdzC.jpg  
 http://i.imgur.com/yqYCS8o.jpg
 
 # How To Use
@@ -43,6 +43,7 @@ end
 To run a pathfinding query on a grid, use 
 ```lua
 PathList = Hexagen:FindPath(HexList, PathType, StartingName, EndingName)
+PathList = Hexagen:FindPath(HexList, "Node", "Node_21", "Node_1")
 ```
 Where PathType is either "Hex" or "Node" to run a hex or node query. Starting/Ending Name are the name of the tiles for the path to start and end at
 

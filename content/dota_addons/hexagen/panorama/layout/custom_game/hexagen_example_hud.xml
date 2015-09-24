@@ -188,13 +188,24 @@
 
 			<Panel class="HexygenLengthRow" hittest="false" >
 				<Button class="HexygenRegenButton" onactivate="HexygenStartHexPathingQuery()" >
-					<Label class="HexygenRegenLabel" id="StartingHexPathingText" text="Start Hex Pathing Query" hittest="false" />
+					<Label class="HexygenRegenLabel" text="Start Hex Pathing Query" hittest="false" />
 				</Button>
 			</Panel>
 
 			<Panel class="HexygenLengthRow" hittest="false" >
 				<Button class="HexygenRegenButton" onactivate="HexygenStartNodePathingQuery()" >
-					<Label class="HexygenRegenLabel" id="StartingNodePathingText" text="Start Node Pathing Query" hittest="false" />
+					<Label class="HexygenRegenLabel" text="Start Node Pathing Query" hittest="false" />
+				</Button>
+			</Panel>
+
+			<Panel class="HexygenLengthRow" hittest="false" >
+				<Button class="HexygenRegenButton" onactivate="HexygenDrawHexNeighbours()" >
+					<Label class="HexygenRegenLabel" text="Draw Hex Neighbours" hittest="false" />
+				</Button>
+			</Panel>
+			<Panel class="HexygenLengthRow" hittest="false" >
+				<Button class="HexygenRegenButton" onactivate="HexygenDrawNodeNeighbours()" >
+					<Label class="HexygenRegenLabel" text="Draw Node Neighbours" hittest="false" />
 				</Button>
 			</Panel>
 		</Panel>

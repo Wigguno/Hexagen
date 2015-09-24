@@ -37,7 +37,7 @@ function CHexygenGameMode:InitGameMode()
 
 	self.draw_pathing_hexes = false
 	self.draw_pathing_nodes = false
-
+	
 	self:RegenHexes()
 
 	GameRules:SetCustomGameTeamMaxPlayers(DOTA_TEAM_GOODGUYS, 1)
@@ -54,6 +54,7 @@ function CHexygenGameMode:InitGameMode()
 	CustomGameEventManager:RegisterListener( "toggle_hexlist_pathing", Dynamic_Wrap(CHexygenGameMode, "OnToggleHexListPathing") )
 	CustomGameEventManager:RegisterListener( "pathing_query", Dynamic_Wrap(CHexygenGameMode, "OnPathingQuery") )
 	CustomGameEventManager:RegisterListener( "request_hexlist", Dynamic_Wrap(CHexygenGameMode, "OnRequestHexList") )
+	CustomGameEventManager:RegisterListener( "draw_neighbours", Dynamic_Wrap(CHexygenGameMode, "OnDrawNeighbours") )
 
 	mode:SetThink( "OnThink", self, "GlobalThink", 2 )
 	print( "Hexagen Example is loaded." )
@@ -92,6 +93,7 @@ function CHexygenGameMode:RegenHexes()
 
 	self.Hexygen_EntHexList = {}
 	self.DrawPath = nil -- reset the pathfinding path because the old indices will mean nothing
+	self.drawNeighboursTarget = nil -- reset the draw neighbours target
 
 	-- Call Hexagen
 	self.HexList = Hexagen:GenerateHexagonGrid(Vector(0, 0, 128), 64, self.PathWidth, self.LengthTable)
@@ -165,6 +167,13 @@ function CHexygenGameMode:OnToggleHexListPathing(keys)
 	end
 end
 
+function CHexygenGameMode:OnDrawNeighbours(keys)
+	local mode = GameRules.HexyGen
+	--PrintTable(keys)
+	print("Got draw target: " .. keys.ind)
+	mode.drawNeighboursTarget = keys.ind
+end
+
 function CHexygenGameMode:OnPathingQuery(keys)
 	local mode = GameRules.HexyGen
 	--PrintTable(keys)
@@ -184,7 +193,7 @@ function CHexygenGameMode:OnThink()
 	if GameRules:State_Get() == DOTA_GAMERULES_STATE_GAME_IN_PROGRESS then
 		
 	local draw_time = 1.00
-
+	
 	-- Draw the PathFinding path if there is one
 	if self.DrawPath ~= nil then
 		local LastLoc = self.HexList[self.DrawPath[1]]
@@ -192,6 +201,13 @@ function CHexygenGameMode:OnThink()
 			local Data = self.HexList[Name]
 			DebugDrawLine(LastLoc["location"], Data["location"], 0, 0, 255, true, draw_time)
 			LastLoc = Data
+		end
+	end
+
+	if self.drawNeighboursTarget ~= nil then
+		local t = self.HexList[self.drawNeighboursTarget]
+		for _, n in pairs(t["neighbours"]) do
+			DebugDrawLine(t["location"], self.HexList[n]["location"], 0, 255, 0, true, draw_time)
 		end
 	end
 
@@ -251,6 +267,8 @@ function CHexygenGameMode:OnThink()
 			DebugDrawCircle(NodeData["location"], colour, 20, 5, true, draw_time)	
 		end	
 	end
+
+
 	elseif GameRules:State_Get() >= DOTA_GAMERULES_STATE_POST_GAME then
 		return nil
 	end

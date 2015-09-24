@@ -468,39 +468,19 @@ function Hexagen:FindPath(HexList, PathType, StartingInd, EndingInd)
 				LowestTileName = TileData["name"]
 			end
 		end
-
-		-- Remove this tile from the open list and add it to the closed list
-		for i, val in pairs(OpenList) do
-			if val["name"] == LowestTileName then
-				table.remove(OpenList, i)
-				break
-			end
-		end
-		table.insert(ClosedList, Map[LowestTileName])
 		iterations = iterations + 1
 
-		-- Check if we're finished
-
-		-- Finish case 1) ClosedList contains EndingInd
-		-- this means we found a solution
-		if ListContainsTile(ClosedList, Map[EndingInd]) == true then
-			SolutionFound = true
-			break
-		end
-
-		-- If the openlist is empty, there is no solution
-		if table.getn(OpenList) == 0 and iterations ~= 1 then
+		-- Record this tiles G Score 
+		if LowestTileName == "" then
 			SolutionFound = false
 			break
 		end
-
-		-- Record this tiles G Score 
 		local ParentG = Map[LowestTileName]["GScore"]
 
 		-- Evaluate each of the neighbours
 		for _, NeighbourName in pairs(Map[LowestTileName]["neighbours"]) do
 			local NeighbourData = Map[NeighbourName]
-
+			
 			-- If the neighbour is pathable and it's not on the closed list, evaluate it further
 			if NeighbourData["pathable"] == true and ListContainsTile(ClosedList, NeighbourData) == false then
 
@@ -536,6 +516,24 @@ function Hexagen:FindPath(HexList, PathType, StartingInd, EndingInd)
 					table.insert(OpenList, NeighbourData)
 				end
 			end
+		end
+
+		-- Remove this tile from the open list and add it to the closed list
+		for i, val in pairs(OpenList) do
+			if val["name"] == LowestTileName then
+				table.remove(OpenList, i)
+				break
+			end
+		end
+		table.insert(ClosedList, Map[LowestTileName])
+
+		-- Check if we're finished
+
+		-- Finish case 1) ClosedList contains EndingInd
+		-- this means we found a solution
+		if ListContainsTile(ClosedList, Map[EndingInd]) == true then
+			SolutionFound = true
+			break
 		end
 	end
 
