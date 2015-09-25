@@ -112,7 +112,6 @@ function CHexygenGameMode:RegenHexes()
 	end
 end
 
-
 -- Spawns a visual hex tile
 -- Probably only used for this game mode
 function CHexygenGameMode:SpawnHex(Location)

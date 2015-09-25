@@ -1,7 +1,7 @@
 # Hexagen
 Hexagon grid generator for Dota 2 custom games
 
-Hexagen utilizes cube coordinates as presented by Amit Patel for generation
+Hexagen utilizes cube coordinates as presented by Amit Patel
 http://www.redblobgames.com/grids/hexagons/
 
 Example Results:  
@@ -10,7 +10,6 @@ http://i.imgur.com/eY94qGS.jpg
 http://i.imgur.com/a2DKdzC.jpg  
 http://i.imgur.com/yqYCS8o.jpg
 
-Unfortunately there is no way to index a specific tile, so the best uses will be random generation, or for user-created grids
 
 # How To Use
 ```lua
@@ -27,6 +26,11 @@ TileList = Hexagen:GenerateHexagonGrid(Vector(0, 0, 128), 64, 32, {3, 2, 2, 3, 2
 ```
 
 TileList stores a list of all Hexes and Nodes, as well as the count of each
+
+To Index a Hex by Cube Coordinates:
+```lua
+HexData = TileList:FindByCubeCoordinates(a, b, c)
+```
 
 Hexagen also includes iterators to iterate over the results of a TileList
 ```lua

@@ -23,7 +23,7 @@ if NodeTile == nil then
 end
 
 function Hexagen:GenerateHexagonGrid(GridCenter, HexRadius, PathWidth, LengthTable)
-	-- Hexagen:GenerateHexagonGrid(HexRadius, PathWidth, LengthTable)
+	-- Hexagen:GenerateHexagonGrid(GridCenter, HexRadius, PathWidth, LengthTable)
 	--
 	-- GridCenter  (Vector): The center of the hex grid
 	-- HexRadius  (Number): The distance from the center of a hex tile to one of the corners
@@ -220,6 +220,15 @@ function Hexagen:GenerateHexagonGrid(GridCenter, HexRadius, PathWidth, LengthTab
 
 					local h = HexTile.new(hex["name"])
 					h.Location = hex["location"]
+
+					-- Store the name in our Cube Coordinates list
+					if TileList.CubeCoordinates[dim_1] == nil then
+						TileList.CubeCoordinates[dim_1] = {}
+					end
+					if TileList.CubeCoordinates[dim_1][dim_2] == nil then
+						TileList.CubeCoordinates[dim_1][dim_2] = {}
+					end
+					TileList.CubeCoordinates[dim_1][dim_2][dim_3] = h.Name
 					
 					-- For each of the 6 neighbour positions
 					for n = 1, table.getn(NeighbourDiffs) do
@@ -386,8 +395,6 @@ function Hexagen:GenerateHexagonGrid(GridCenter, HexRadius, PathWidth, LengthTab
 		end
 	end
 
-
-
 	return TileList
 end
 
@@ -397,6 +404,7 @@ function TileList.new()
 	self.NodeCount = 0
 	self.HexList = {}
 	self.NodeList = {}
+	self.CubeCoordinates = {}
 
 	-- An iterator for the hexes
 	function self:AllHexes()
@@ -415,6 +423,19 @@ function TileList.new()
 		return function()
 			i = i + 1
 			if i <= n then return self.NodeList["Node_" .. i] end
+		end
+	end
+
+	-- Look up a hex tile by cube coordinates
+	function self:FindByCubeCoordinates(CoordA, CoordB, CoordC)
+		if (CoordA + CoordB + CoordC) == 0 
+		and self.CubeCoordinates[CoordA] ~= nil 
+		and self.CubeCoordinates[CoordA][CoordB] ~= nil 
+		and self.CubeCoordinates[CoordA][CoordB][CoordC] ~= nil
+		then
+			return self.HexList[self.CubeCoordinates[CoordA][CoordB][CoordC]]
+		else
+			return nil
 		end
 	end
  
@@ -500,8 +521,6 @@ function TileList.new()
 					local thisH = self:PathingEstimateDistance(NeighbourName, EndingInd)
 
 					local thisF = thisG + thisH
-
-					--print(NeighbourName .. "G: " .. thisG .. " H: " .. thisH)
 
 					-- Check if the tile is on the open list
 					if ListContainsTile(OpenList, NeighbourData) == true then
