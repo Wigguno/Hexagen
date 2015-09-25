@@ -22,25 +22,38 @@ if NodeTile == nil then
 	NodeTile.__index = NodeTile
 end
 
-function Hexagen:GenerateHexagonGrid(GridCenter, HexRadius, PathWidth, LengthTable)
-	-- Hexagen:GenerateHexagonGrid(GridCenter, HexRadius, PathWidth, LengthTable)
+function Hexagen:GenerateHexagonGrid(GridCenter, GridOrientation, HexDistance, LengthTable)
+	-- Hexagen:GenerateHexagonGrid(GridCenter, GridOrientation, HexDistance, LengthTable)
 	--
-	-- GridCenter  (Vector): The center of the hex grid
-	-- HexRadius  (Number): The distance from the center of a hex tile to one of the corners
-	-- PathWidth  (Number): The distance to leave between adjacent hex tiles
-	-- LengthTable (Table): A table that defines the length of each of the 6 legs
+	-- GridCenter  		(Vector): The center of the hex grid
+	-- GridOrientation  (String): Either "Pointy" or "Flat", depending on which edge of a hexagon you want pointing up
+	-- HexDistance  	(Number): The Radius of a hexagon (distance from center to corner, NOT CENTER TO FLAT), plus the path width to leave between each hexagon
+	-- LengthTable 		 (Table): A table that defines the length of each of the 6 legs
 	--
 	-- Example:
-	-- TileList = Hexagen:GenerateHexagonGrid(Vector(0, 0, 128), 64, 32, {3, 2, 2, 3, 2, 2}))
+	-- TileList = Hexagen:GenerateHexagonGrid(Vector(0, 0, 128), "Pointy", 96, 32, {3, 2, 2, 3, 2, 2}))
 
-	-- This is a distance used internally to set the distance between hexes
-	local HexDistance = HexRadius + PathWidth
 	
 	-- Define our offset sizes for each direction
 	-- This converts Cube Coordinates (A,B,C) into Cartesian Coordinates (X,Y)
-	local HexOffset_A = Vector(	0, 		1, 		0) * HexDistance
-	local HexOffset_B = Vector(	-0.85, 	-0.5, 	0) * HexDistance
-	local HexOffset_C = Vector(	0.85, 	-0.5, 	0) * HexDistance
+	local x = math.sqrt(3) / 2
+	local xn = -1 * x
+
+	local HexOffset_A = Vector(0, 0, 0)
+	local HexOffset_B = Vector(0, 0, 0)
+	local HexOffset_C = Vector(0, 0, 0)
+
+	if string.lower(GridOrientation) == "pointy" then
+		HexOffset_A = Vector(	0, 		1, 		0) * HexDistance
+		HexOffset_B = Vector(	xn, 	-0.5, 	0) * HexDistance
+		HexOffset_C = Vector(	x, 		-0.5, 	0) * HexDistance
+	elseif string.lower(GridOrientation) == "flat" then
+		HexOffset_A = Vector(-0.5, 		x, 		0) * HexDistance
+		HexOffset_B = Vector(-0.5,		xn,		0) * HexDistance
+		HexOffset_C = Vector(1,			0, 		0) * HexDistance
+	else
+		return nil
+	end
 
 	-- set the center of the grid
 	local CenterLocation = GridCenter
@@ -267,9 +280,9 @@ function Hexagen:GenerateHexagonGrid(GridCenter, HexRadius, PathWidth, LengthTab
 
 	-- This is the distance from the center of the hex to the node
 	local NodeOffset = {}
-	NodeOffset[1] = Vector(	0, 		1, 		0) * HexDistance
-	NodeOffset[2] = Vector(	-0.85, 	0.5, 	0) * HexDistance
-	NodeOffset[3] = Vector(	-0.85, 	-0.5, 	0) * HexDistance
+	NodeOffset[1] = HexOffset_A
+	NodeOffset[2] = HexOffset_C * -1
+	NodeOffset[3] = HexOffset_B
 	NodeOffset[4] = NodeOffset[1] * -1
 	NodeOffset[5] = NodeOffset[2] * -1
 	NodeOffset[6] = NodeOffset[3] * -1

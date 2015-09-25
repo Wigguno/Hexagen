@@ -50,6 +50,7 @@
 	
 	<Panel class="HexygenHudRoot" hittest="false" >
 		<Panel class="HexygenGridControlContainer" hittest="false" >
+
 			<Panel class="HexygenLengthRow" hittest="false" >
 
 				<Label class="HexygenLengthLabelName" id="HexygenLengthNameA" text="A Length: " hittest="false" />
@@ -162,7 +163,13 @@
 					</Button>
 				</Panel>
 
-			</Panel>>
+			</Panel>
+
+			<Panel class="HexygenLengthRow" hittest="false" >
+				<Button class="HexygenRegenButton" onactivate="HexygenToggleOrientation()" >
+					<Label class="HexygenRegenLabel" id="OrientationToggle" text="Pointy Orientation" hittest="false" />
+				</Button>
+			</Panel>
 
 			<Panel class="HexygenLengthRow" hittest="false" >
 				<Button class="HexygenRegenButton" onactivate="HexygenRegen()" >

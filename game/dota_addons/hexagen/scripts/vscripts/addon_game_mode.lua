@@ -26,14 +26,18 @@ function CHexygenGameMode:InitGameMode()
 	print( "Hexagen Example is loading..." )
 
 	self.Hexygen_EntHexList = {}
+
 	self.PathWidth = 32
+
 	self.LengthTable = {}
 	self.LengthTable[1] = 3
 	self.LengthTable[2] = 2
 	self.LengthTable[3] = 2
 	self.LengthTable[4] = 3
 	self.LengthTable[5] = 2
-	self.LengthTable[6] = 2
+	self.LengthTable[6] = 2	
+
+	self.HexOrientation = "Pointy"
 
 	self.draw_pathing_hexes = false
 	self.draw_pathing_nodes = false
@@ -55,6 +59,7 @@ function CHexygenGameMode:InitGameMode()
 	CustomGameEventManager:RegisterListener( "pathing_query", Dynamic_Wrap(CHexygenGameMode, "OnPathingQuery") )
 	CustomGameEventManager:RegisterListener( "request_hexlist", Dynamic_Wrap(CHexygenGameMode, "OnRequestHexList") )
 	CustomGameEventManager:RegisterListener( "draw_neighbours", Dynamic_Wrap(CHexygenGameMode, "OnDrawNeighbours") )
+	CustomGameEventManager:RegisterListener( "toggle_orientation", Dynamic_Wrap(CHexygenGameMode, "OnToggleOrientation") )
 
 	mode:SetThink( "OnThink", self, "GlobalThink", 2 )
 	print( "Hexagen Example is loaded." )
@@ -96,7 +101,7 @@ function CHexygenGameMode:RegenHexes()
 	self.drawNeighboursTarget = nil -- reset the draw neighbours target
 
 	-- Call Hexagen
-	self.TileList = Hexagen:GenerateHexagonGrid(Vector(0, 0, 128), 64, self.PathWidth, self.LengthTable)
+	self.TileList = Hexagen:GenerateHexagonGrid(Vector(0, 0, 128), self.HexOrientation, 64 + self.PathWidth, self.LengthTable)
 
 	print("HexCount: " .. self.TileList.HexCount)
 	print("NodeCount: " .. self.TileList.NodeCount)
@@ -116,10 +121,15 @@ end
 -- Probably only used for this game mode
 function CHexygenGameMode:SpawnHex(Location)
 
+	local angle = 0
+	if string.lower(self.HexOrientation) == "pointy" then
+		angle = 30
+	end
+
 	local ent_hex = SpawnEntityFromTableSynchronous("prop_dynamic", {
 		origin = Location,
 		model = "models/hexygen_props/hex_064.vmdl",
-		angles = Vector(0,  30, 0)
+		angles = Vector(0,  angle, 0)
 		})
 
 	return ent_hex
@@ -200,6 +210,14 @@ function CHexygenGameMode:OnPathingQuery(keys)
 		print("Path found!")
 	end
 	mode.DrawPath = PathIndList
+
+end
+function CHexygenGameMode:OnToggleOrientation(keys)
+	local mode = GameRules.HexyGen
+	--PrintTable(keys)
+
+	mode.HexOrientation = keys.Type
+	mode:RegenHexes()
 
 end
 

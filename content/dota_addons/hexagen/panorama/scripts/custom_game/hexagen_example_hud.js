@@ -42,6 +42,20 @@ function OnRecieveHexList(data)
 	
 }
 
+function HexygenToggleOrientation()
+{
+	if ($("#OrientationToggle").text == "Pointy Orientation")
+	{	
+		$("#OrientationToggle").text = "Flat Orientation";
+		GameEvents.SendCustomGameEventToServer( "toggle_orientation", {"Type" : "Flat"} );
+	}
+	else
+	{
+		$("#OrientationToggle").text = "Pointy Orientation";
+		GameEvents.SendCustomGameEventToServer( "toggle_orientation", {"Type" : "Pointy"} );
+	}
+}
+
 function HexygenLessButton(Direction)
 {
 	//$.Msg("Less " + Direction)

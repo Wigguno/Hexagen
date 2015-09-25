@@ -13,16 +13,16 @@ http://i.imgur.com/yqYCS8o.jpg
 
 # How To Use
 ```lua
-Hexagen:GenerateHexagonGrid(GridCenter, HexRadius, PathWidth, LengthTable)
+Hexagen:GenerateHexagonGrid(GridCenter, GridOrientation, HexDistance, LengthTable)
 ```
-GridCenter  (Vector): The center of the hex grid  
-HexRadius  (Number): The distance from the center of a hex tile to one of the corners  
-PathWidth  (Number): The distance to leave between adjacent hex tiles  
-LengthTable (Table): A table that defines the length of each of the 6 legs
+GridCenter  		(Vector): The center of the hex grid
+GridOrientation     (String): Either "Pointy" or "Flat", depending on which edge of a hexagon you want pointing up
+HexDistance  	    (Number): The Radius of a hexagon (distance from center to corner, NOT CENTER TO FLAT), plus the path width to leave between each hexagon
+LengthTable 		 (Table): A table that defines the length of each of the 6 legs
 
 Example:  
 ```lua
-TileList = Hexagen:GenerateHexagonGrid(Vector(0, 0, 128), 64, 32, {3, 2, 2, 3, 2, 2}))
+TileList = Hexagen:GenerateHexagonGrid(Vector(0, 0, 128), "Flat", 64 + 32, {3, 2, 2, 3, 2, 2}))
 ```
 
 TileList stores a list of all Hexes and Nodes, as well as the count of each
