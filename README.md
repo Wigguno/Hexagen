@@ -1,8 +1,10 @@
 # Hexagen
-Hexagon grid generator for Dota 2 custom games
+Hexagen is a hexagonal grid generator for Dota 2 custom games, programmed as a lua library
 
-Hexagen generates a radial hexagonal grid for you to use in your Dota 2 custom game. 
+Hexagen generates a radial hexagonal grid for you to use in your Dota 2 custom game.
 Using Hexagen, you are able to create a grid of any size, and easily perform iterations and pathfinding operations on it.
+Hexagen will not only generate the grid of hexes, but also the paths between the hexes.
+Every neighbouring hex and path node are linked together, which could allow for many unique custom games to be made. 
 Hexagen was originally developed to aid in a Settlers of Catan clone, and has evolved to be flexible enough for general use.
 
 Hexagen utilizes cube coordinates as presented by Amit Patel
@@ -19,10 +21,10 @@ http://i.imgur.com/yqYCS8o.jpg
 ```lua
 Hexagen:GenerateHexagonGrid(GridCenter, GridOrientation, HexDistance, LengthTable)
 ```
-GridCenter  		(Vector): The center of the hex grid.  
-GridOrientation     (String): Either "Pointy" or "Flat", depending on which edge of a hexagon you want pointing up.  
-HexDistance  	    (Number): The Radius of a hexagon (distance from center to corner, NOT CENTER TO FLAT), plus the path width to leave between each hexagon.  
-LengthTable 		 (Table): A table that defines the length of each of the 6 legs.  
+GridCenter (Vector): The center of the hex grid.  
+GridOrientation String): Either "Pointy" or "Flat", depending on which edge of a hexagon you want pointing up.  
+HexDistance (Number): The Radius of a hexagon (distance from center to corner), plus the path width to leave between each hexagon.  
+LengthTable (Table): A table that defines the length of each of the 6 legs.  
 
 Example:  
 ```lua

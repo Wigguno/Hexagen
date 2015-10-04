@@ -31,7 +31,7 @@ function Hexagen:GenerateHexagonGrid(GridCenter, GridOrientation, HexDistance, L
 	-- LengthTable 		 (Table): A table that defines the length of each of the 6 legs
 	--
 	-- Example:
-	-- TileList = Hexagen:GenerateHexagonGrid(Vector(0, 0, 128), "Pointy", 96, 32, {3, 2, 2, 3, 2, 2}))
+	-- TileList = Hexagen:GenerateHexagonGrid(Vector(0, 0, 128), "Pointy", 96, {3, 2, 2, 3, 2, 2}))
 
 	
 	-- Define our offset sizes for each direction
@@ -68,6 +68,8 @@ function Hexagen:GenerateHexagonGrid(GridCenter, GridOrientation, HexDistance, L
 	-- We create the table bigger than we require and won't fill it entirely
 	-- This table is used because finding neighbours is easy
 	-- Once all hexes are generated and named, and their neighbours are located, this table becomes unneeded
+
+	-- This has to be pre-allocated because we want to be able to look forward to find neighbours easily
 	for dim_1 = (dim_len * -1), dim_len  do
 		HexTable[dim_1] = {}
 
